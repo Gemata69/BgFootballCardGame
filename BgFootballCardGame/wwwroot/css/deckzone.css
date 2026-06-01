@@ -1,0 +1,38 @@
+﻿.deck-zone, .gy-zone {
+    width: 7.5vw;
+    height: 14vh;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5vh;
+    text-align: center;
+    box-shadow: inset 0 0 10px black;
+    border: 2px solid #555;
+    transition: 0.3s;
+}
+
+.deck-zone {
+    background-color: #8b0000;
+    color: white;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px);
+    border-color: #ffd700;
+}
+
+.gy-zone {
+    background-color: rgba(0,0,0,0.6);
+    color: gray;
+}
+
+.gy-filled {
+    background-color: #333;
+    color: white;
+    border-color: #ff4444;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

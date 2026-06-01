@@ -1,14 +1,13 @@
 using BgFootballCardGame.Data;
-using BgFootballCardGame.Hubs; // НОВО: Добавяме пътя до хъбовете
+using BgFootballCardGame.Hubs; 
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSignalR(); // НОВО: Активираме SignalR услугата
+builder.Services.AddSignalR(); 
 
-// ---> ТУК ДОБАВЯМЕ ВРЪЗКАТА С БАЗАТА ДАННИ <---
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -36,6 +35,6 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
 
-app.MapHub<GameHub>("/gameHub"); // НОВО: Създаваме маршрута за нашия хъб, за да могат играчите да се свързват
+app.MapHub<GameHub>("/gameHub"); 
 
 app.Run();
