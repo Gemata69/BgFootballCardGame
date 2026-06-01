@@ -1,0 +1,619 @@
+﻿@page
+@model BgFootballCardGame.Pages.BoardModel
+@{
+    ViewData["Title"] = "Игрално поле";
+    Layout = null; 
+}
+
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8" />
+    <title>Игрално поле - BG Football Card</title>
+    <link rel="stylesheet" href="~/css/board.css" />
+    <style>
+        /* Дизайн за Скамейката (GY) и Тестето (Deck) */
+        .deck-zone, .gy-zone {
+            width: 7.5vw; 
+            height: 14vh; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            font-size: 1.5vh; 
+            text-align: center; 
+            box-shadow: inset 0 0 10px black; 
+            border: 2px solid #555;
+            transition: 0.3s;
+        }
+        .deck-zone { 
+            background-color: #8b0000; 
+            color: white; 
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px); 
+            border-color: #ffd700; 
+        }
+        /* СКАМЕЙКАТА */
+        .gy-zone { background-color: rgba(0,0,0,0.6); color: gray; }
+        .gy-filled { background-color: #333; color: white; border-color: #ff4444; }
+
+        @@keyframes blink { 50% {opacity: 0;} }
+    </style>
+</head>
+<body>
+
+<!-- ЕКРАН ЗА ЗАРОВЕТЕ -->
+<div id="dice-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;">
+    <h1 id="dice-status-text" style="color: #ffd700; margin-bottom: 40px; font-size: 2.5em; text-transform: uppercase;">Кой ще започне пръв?</h1>
+    
+    <div style="display: flex; align-items: center; gap: 50px; margin-bottom: 40px;">
+        <div style="text-align: center;"><h3>ТИ</h3><div id="my-dice" class="dice-icon">🎲</div></div>
+        <div style="font-size: 2em; color: gray;">VS</div>
+        <div style="text-align: center;"><h3>ПРОТИВНИК</h3><div id="enemy-dice" class="dice-icon">🎲</div></div>
+    </div>
+
+    <button id="start-roll-btn" class="dice-btn" style="font-size: 1.5em; padding: 15px 30px;">Хвърли твоето зарче!</button>
+    <h2 id="dice-final-result" style="display: none; font-size: 2em; margin-top: 20px;"></h2>
+    <p id="click-to-start-hint" style="display: none; margin-top: 40px; font-size: 1.5em; color: #aaaaaa; animation: blink 1.5s infinite;">(Кликни някъде по екрана, за да започнеш рунда)</p>
+</div>
+
+<!-- ПРОЗОРЕЦ: ИСКАШ ЛИ ДА АКТИВИРАШ КАПАН -->
+<div id="trap-prompt-modal" style="display: none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, 0); background-color: rgba(0, 0, 0, 0.95); border: 3px solid #ff0000; border-radius: 10px; padding: 30px; text-align: center; color: white; z-index: 1500; box-shadow: 0 0 20px red;">
+    <h2 style="color: #ffd700;">Времето изтече!</h2>
+    <h3 id="trap-question">Имате ли поставен капан, който искате да активирате?</h3>
+    <div style="margin-top: 20px;">
+        <button id="btn-trap-yes" class="dice-btn" style="background-color: #28a745; margin-right: 15px;">ДА, активирай</button>
+        <button id="btn-trap-no" class="dice-btn" style="background-color: #dc3545;">НЕ</button>
+    </div>
+</div>
+
+<!-- ПРОЗОРЕЦ: ИЗБОР ПРИ СПЕЛ -->
+<div id="spell-search-modal" style="display: none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, 0); background-color: rgba(19, 84, 122, 0.95); border: 3px solid #00ffff; border-radius: 10px; padding: 30px; text-align: center; color: white; z-index: 1500; box-shadow: 0 0 20px #00ffff;">
+    <h2 style="color: #80d0c7;">✨ Активиран Спел! ✨</h2>
+    <h3>Търсене в тестето... Каква карта искаш да изтеглиш?</h3>
+    <p style="font-size: 0.9em; color: #ccc;">(След като избереш, тестето ще се размеси автоматично)</p>
+    <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center;">
+        <button id="btn-draw-footballer" class="dice-btn" style="background: linear-gradient(135deg, #ffd700, #d4af37); color: black; border: 1px solid white;">⚽ Футболист</button>
+        <button id="btn-draw-trap" class="dice-btn" style="background: linear-gradient(135deg, #4a00e0, #8e2de2); color: white; border: 1px solid white;">🪤 Капан</button>
+    </div>
+</div>
+
+<!-- ПРОЗОРЕЦ: БИТКА -->
+<div id="battle-result-modal" style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, 0); background-color: rgba(0, 0, 0, 0.9); border: 4px solid #ffd700; border-radius: 15px; padding: 30px; text-align: center; color: white; z-index: 1000; width: 600px; box-shadow: 0 0 30px black;">
+    <h1 id="battle-status" style="font-size: 3em; margin: 0; text-transform: uppercase;"></h1>
+    <hr style="border-color: #ffd700;" />
+    <h3 id="battle-math" style="line-height: 1.5;"></h3>
+    <button id="close-battle-btn" class="dice-btn" style="margin-top: 20px;">Продължи (Картите отиват на Скамейката)</button>
+</div>
+
+<!-- ГЛАВНА СТРУКТУРА С РАЗДЕЛЯНЕ -->
+<div class="game-wrapper">
+    
+    <!-- САЙДБАР (Инфо панел) -->
+    <div class="sidebar">
+        <h1 id="round-title" style="color: white; font-size: 4vh; margin-bottom: 2vh;">РУНД 1</h1>
+        <h2 id="turn-timer" style="color: #ffd700; display: none; font-size: 3vh; margin-bottom: 3vh; text-shadow: 1px 1px 2px black;">Оставащо време: 15 сек.</h2>
+        
+        <div id="battle-condition-banner" style="display: none; background-color: rgba(139, 0, 0, 0.8); padding: 20px; border-radius: 10px; border: 2px solid #ffd700; width: 90%;">
+            <h3 style="margin: 0; text-transform: uppercase; font-size: 2vh;" id="battle-condition-text"></h3>
+        </div>
+
+        <div style="margin-top: 5vh; width: 100%; border-top: 2px solid gray; padding-top: 2vh; text-align: left;">
+            <h3 style="margin-bottom: 10px;">Противниково Тесте: <span id="enemy-deck-count" style="color: #ffd700;">40</span></h3>
+            <h3>Твоето Тесте: <span id="my-deck-count" style="color: #ffd700;">40</span></h3>
+        </div>
+    </div>
+
+    <!-- ТЕРЕН 3D -->
+    <div class="board-container">
+        
+        <!-- ЗОНА НА ПРОТИВНИКА -->
+        <div class="player-zone">
+            <div style="display: flex; justify-content: space-between; width: 60%; align-items: center; margin-bottom: 1vh;">
+                <h4 style="color: #ccc; margin: 0;">Ръка на Противника</h4>
+                <div class="card-row" id="enemy-hand" style="margin: 0; transform: scale(0.6); transform-origin: right;">
+                </div>
+            </div>
+            <h3>@Model.Game.Player2.Name - Жизнени точки: <span id="enemy-lp" style="color: #ff4444;">30</span></h3>
+            
+            <div style="display: flex; gap: 2vw; align-items: center; justify-content: center; width: 100%;">
+                <!-- Неговата Скамейка и Тесте отстрани -->
+                <div style="display: flex; flex-direction: column; gap: 1vh;">
+                    <div class="gy-zone" id="enemy-gy">СКАМЕЙКА<br/>(0)</div>
+                    <div class="deck-zone">ТЕСТЕ</div>
+                </div>
+                
+                <div class="field-3d" style="transform: rotateX(-15deg);">
+                    <div class="card-row" id="enemy-back-row">
+                        @for (int i = 0; i < 5; i++) { <div class="card-slot enemy-board-slot" data-slot-index="@i">Слот @(i + 1)</div> }
+                    </div>
+                    <div class="card-row" id="enemy-front-row">
+                        @for (int i = 0; i < 5; i++) { <div class="card-slot enemy-board-slot" data-slot-index="@i">Слот @(i + 1)</div> }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr style="width: 80%; border-color: rgba(255,255,255,0.3); margin: 2vh 0;" />
+
+        <!-- ТВОЯТА ЗОНА -->
+        <div class="player-zone">
+            <div style="display: flex; gap: 2vw; align-items: center; justify-content: center; width: 100%;">
+                
+                <div class="field-3d">
+                    <div class="card-row" id="my-front-row">
+                        @for (int i = 0; i < 5; i++) { <div class="card-slot my-board-slot" data-slot-index="@i">Слот @(i + 1)</div> }
+                    </div>
+                    <div class="card-row" id="my-back-row">
+                        @for (int i = 0; i < 5; i++) { <div class="card-slot my-board-slot" data-slot-index="@i">Слот @(i + 1)</div> }
+                    </div>
+                </div>
+
+                <!-- Твоята Скамейка и Тесте отстрани -->
+                <div style="display: flex; flex-direction: column; gap: 1vh;">
+                    <div class="deck-zone">ТЕСТЕ</div>
+                    <div class="gy-zone" id="my-gy">СКАМЕЙКА<br/>(0)</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 1vh;">@Model.Game.Player1.Name - Жизнени точки: <span id="my-lp" style="color: #44ff44;">30</span></h3>
+        </div>
+
+        <!-- Твоята ръка (върху дъската, ненаклонена) -->
+        <div class="my-hand-wrapper">
+            <div class="card-row my-hand" id="my-hand-container"></div>
+        </div>
+
+    </div>
+</div>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script>
+    const connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
+    
+    // --- SIGNAL R - ХВАЩАМЕ ХОД НА ПРОТИВНИКА ---
+    connection.on("ReceiveCardPlayed", function (playerName, handIndex, boardIndex, isFrontRow) {
+        let myName = "@Model.Game.Player1.Name";
+        if (playerName !== myName) {
+            let targetRowId = isFrontRow ? "enemy-front-row" : "enemy-back-row";
+            let slot = document.querySelector("#" + targetRowId + " .enemy-board-slot[data-slot-index='" + boardIndex + "']");
+            if (slot) {
+                slot.className = "card-slot enemy-board-slot card-back"; // Скрита карта
+                slot.innerHTML = ""; 
+                let enemyHand = document.getElementById("enemy-hand");
+                if (enemyHand.lastElementChild) enemyHand.removeChild(enemyHand.lastElementChild);
+            }
+        }
+    });
+    connection.start();
+
+    // ----------------------------------------------------------------------
+    // СИСТЕМА ЗА ТЕСТЕТА ОТ ПО 40 КАРТИ
+    // ----------------------------------------------------------------------
+    function createDeck() {
+        let deck = [];
+        
+        // 1. ФУТБОЛИСТИ: 23 броя (Увеличени с 3, за да запазим общия брой 40)
+        for(let i=0; i<23; i++) deck.push({ name: "Футболист " + (i+1), type: "Footballer", atk: Math.floor(Math.random()*20)+70, def: Math.floor(Math.random()*20)+70, con: Math.floor(Math.random()*20)+65 });
+        
+        // 2. СПЕЛОВЕ: Общо 7
+        // ОГРАНИЧЕНИЕ: Само 2 копия на "Стратегия: +2 Карти"
+        for(let i=0; i<2; i++) deck.push({ name: "Стратегия: +2 Карти", type: "Spell", effect: "Draw2" });
+        // 5 копия на спела за търсене
+        for(let i=0; i<5; i++) deck.push({ name: "Скаутски Доклад", type: "Spell", effect: "Search" });
+        
+        // 3. КАПАНИ: Общо 10
+        for(let i=0; i<5; i++) deck.push({ name: "Отрицание на Атака", type: "Trap", effect: "NegateAttack" });
+        for(let i=0; i<5; i++) deck.push({ name: "Засада", type: "Trap", effect: "-5 Точки" });
+        
+        // Разбъркваме масива (Shuffle)
+        return deck.sort(() => Math.random() - 0.5);
+    }
+
+    let myDeck = createDeck();
+    let enemyDeck = createDeck();
+    let myBenchCount = 0;    // СКАМЕЙКА брояч
+    let enemyBenchCount = 0; // СКАМЕЙКА брояч
+    let myActiveTrap = null; 
+
+    function updateDeckUI() {
+        document.getElementById("my-deck-count").innerText = myDeck.length;
+        document.getElementById("enemy-deck-count").innerText = enemyDeck.length;
+    }
+
+    function drawCardFromDeck() {
+        if(myDeck.length > 0) {
+            let card = myDeck.pop();
+            addNewCardToHand(card);
+            updateDeckUI();
+        }
+    }
+
+    function drawInitialHands() {
+        let enemyHandContainer = document.getElementById("enemy-hand");
+        for(let i=0; i<5; i++) {
+            drawCardFromDeck();
+            enemyDeck.pop(); 
+            enemyHandContainer.innerHTML += '<div class="card-slot card-back"></div>';
+        }
+        updateDeckUI();
+    }
+    drawInitialHands();
+
+    // -- ПРОМЕНЛИВИ ЗА СЪСТОЯНИЕТО --
+    let currentRound = 1;
+    let timeLeft = 15;
+    let countdown;
+    let selectedCardElement = null;
+    let selectedCardIndex = null;
+    let isFrontRowTarget = true;
+    let isGameStarted = false;
+    let currentMyStat = "";
+    let currentEnemyStat = "";
+    let myLifePoints = 30;
+    let enemyLifePoints = 30;
+
+    // -- ЗАРОВЕ --
+    const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+    document.getElementById("start-roll-btn").addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.style.display = "none";
+        
+        let myDiceEl = document.getElementById("my-dice");
+        let enemyDiceEl = document.getElementById("enemy-dice");
+        let statusText = document.getElementById("dice-status-text");
+        
+        statusText.innerText = "Ти хвърляш...";
+        myDiceEl.classList.add("rolling");
+        let rollInterval = setInterval(() => { myDiceEl.innerText = diceFaces[Math.floor(Math.random() * 6)]; }, 100);
+
+        setTimeout(() => {
+            clearInterval(rollInterval);
+            myDiceEl.classList.remove("rolling");
+            let myRoll = Math.floor(Math.random() * 6) + 1;
+            myDiceEl.innerText = diceFaces[myRoll - 1];
+            myDiceEl.style.color = "#00ff00";
+
+            statusText.innerText = "Противникът хвърля...";
+            enemyDiceEl.classList.add("rolling");
+            let enemyInterval = setInterval(() => { enemyDiceEl.innerText = diceFaces[Math.floor(Math.random() * 6)]; }, 100);
+
+            setTimeout(() => {
+                clearInterval(enemyInterval);
+                enemyDiceEl.classList.remove("rolling");
+                let enemyRoll = Math.floor(Math.random() * 6) + 1;
+                enemyDiceEl.innerText = diceFaces[enemyRoll - 1];
+                enemyDiceEl.style.color = "#ff0000";
+
+                isGameStarted = true;
+                let finalResultEl = document.getElementById("dice-final-result");
+                
+                if (myRoll >= enemyRoll) {
+                    statusText.innerText = "ТИ ПЕЧЕЛИШ БОНУСА!";
+                    finalResultEl.innerText = "Изтеглена е 1 бонус карта в твоята ръка.";
+                    finalResultEl.style.color = "#00ff00";
+                    drawCardFromDeck();
+                } else {
+                    statusText.innerText = "ПРОТИВНИКЪТ ПЕЧЕЛИ БОНУСА!";
+                    finalResultEl.innerText = "Противникът изтегли 1 допълнителна карта.";
+                    finalResultEl.style.color = "#ff0000";
+                    enemyDeck.pop(); updateDeckUI();
+                    document.getElementById("enemy-hand").innerHTML += '<div class="card-slot card-back"></div>';
+                }
+
+                finalResultEl.style.display = "block";
+                document.getElementById("click-to-start-hint").style.display = "block";
+
+            }, 1500);
+        }, 1500);
+    });
+
+    document.getElementById("dice-overlay").addEventListener("click", function() {
+        if (document.getElementById("click-to-start-hint").style.display === "block") {
+            this.style.display = "none";
+            startRoundFlow();
+        }
+    });
+
+    // -- РУНД И ТАЙМЕР --
+    function startRoundFlow() {
+        timeLeft = 15;
+        document.getElementById("round-title").innerText = "РУНД " + currentRound;
+        document.getElementById("my-hand-container").style.pointerEvents = "auto";
+        
+        const stats = ["АТАКА", "ЗАЩИТА", "КОНТРОЛ"];
+        currentMyStat = stats[Math.floor(Math.random() * stats.length)];
+        currentEnemyStat = stats[Math.floor(Math.random() * stats.length)];
+        
+        document.getElementById("battle-condition-text").innerText = `Търси се: Твоята ${currentMyStat} ⚔️ срещу Неговата ${currentEnemyStat}`;
+        document.getElementById("battle-condition-banner").style.display = "block";
+        
+        const timerElement = document.getElementById("turn-timer");
+        timerElement.style.display = "block";
+        timerElement.style.color = "#ffd700";
+        
+        if (countdown) clearInterval(countdown);
+        
+        countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerElement.innerText = "ВРЕМЕТО ИЗТЕЧЕ!";
+                timerElement.style.color = "red";
+                clearHighlights();
+                document.getElementById("my-hand-container").style.pointerEvents = "none";
+                
+                if (myActiveTrap) {
+                    document.getElementById("trap-question").innerText = `Искате ли да активирате капана си: ${myActiveTrap.name}?`;
+                    document.getElementById("trap-prompt-modal").style.display = "block";
+                } else {
+                    executeBattlePhase(false);
+                }
+                
+            } else {
+                timerElement.innerText = "Оставащо време: " + timeLeft + " сек.";
+                timeLeft--;
+            }
+        }, 1000);
+
+        let enemyThinkTime = Math.floor(Math.random() * 3000) + 3000;
+        setTimeout(() => {
+            if (timeLeft > 0) {
+                let randomEnemySlot = Math.floor(Math.random() * 5);
+                connection.invoke("PlayCard", "Противник", 0, randomEnemySlot, true).catch(err => console.error(err.toString()));
+            }
+        }, enemyThinkTime);
+    }
+
+    // -- КАПАНИ И БИТКА --
+    document.getElementById("btn-trap-yes").addEventListener("click", function() {
+        document.getElementById("trap-prompt-modal").style.display = "none";
+        executeBattlePhase(true);
+    });
+
+    document.getElementById("btn-trap-no").addEventListener("click", function() {
+        document.getElementById("trap-prompt-modal").style.display = "none";
+        executeBattlePhase(false);
+    });
+
+    function executeBattlePhase(userActivatedTrap) {
+        document.querySelectorAll(".enemy-board-slot.card-back").forEach(slot => {
+            slot.classList.remove("card-back");
+            slot.classList.add("card-filled", "card-footballer"); 
+            slot.innerHTML = `<div class="card-content"><div class="card-title">Противник</div><div class="card-stats">ATK:82<br/>DEF:80<br/>КОН:75</div></div>`;
+        });
+        
+        let myBasePoints = 85;
+        let enemyBasePoints = 82;
+        let enemyTrapEffect = 0; 
+        
+        let details = `Твоят футболист (${currentMyStat}): ${myBasePoints}<br/>`;
+        details += `Противников футболист (${currentEnemyStat}): ${enemyBasePoints}<br/><br/>`;
+        
+        if (userActivatedTrap && myActiveTrap) {
+            if (myActiveTrap.effect === "NegateAttack") {
+                enemyBasePoints = 0;
+                details += `🛑 <strong>Активира капан: Отрицание на Атака!</strong> Точките на противника падат на 0!<br/>`;
+            } else {
+                enemyBasePoints -= 5;
+                details += `⚠️ <strong>Активира капан: Засада!</strong> -5 точки за противника!<br/>`;
+            }
+        }
+        
+        let myFinalPoints = myBasePoints;
+        let enemyFinalPoints = enemyBasePoints + enemyTrapEffect;
+        
+        details += `<hr style="border-color: gray;" />`;
+        details += `<strong>КРАЕН РЕЗУЛТАТ: ТИ (${myFinalPoints}) ⚔️ ПРОТИВНИК (${enemyFinalPoints})</strong>`;
+        
+        let statusTitle = document.getElementById("battle-status");
+        if (myFinalPoints > enemyFinalPoints) {
+            statusTitle.innerText = "WIN"; statusTitle.style.color = "#00ff00";
+            enemyLifePoints -= 3;
+            details += `<br/><br/><span style="color: #00ff00; font-size: 1.2em;">🔥 Противникът губи 3 жизнени точки!</span>`;
+        } else if (myFinalPoints < enemyFinalPoints) {
+            statusTitle.innerText = "DEFEAT"; statusTitle.style.color = "#ff0000";
+            myLifePoints -= 3;
+            details += `<br/><br/><span style="color: #ff0000; font-size: 1.2em;">🩸 Ти губиш 3 жизнени точки!</span>`;
+        } else {
+            statusTitle.innerText = "DRAW"; statusTitle.style.color = "#aaaaaa";
+            details += `<br/><br/><span style="color: gray; font-size: 1.2em;">⚖️ Равенство! Никой не губи точки.</span>`;
+        }
+        
+        document.getElementById("battle-math").innerHTML = details;
+        document.getElementById("my-lp").innerText = myLifePoints;
+        document.getElementById("enemy-lp").innerText = enemyLifePoints;
+
+        let nextBtn = document.getElementById("close-battle-btn");
+        if (myLifePoints <= 0 || enemyLifePoints <= 0) {
+            nextBtn.innerText = "КРАЙ НА ИГРАТА (Започни отначало)";
+            nextBtn.style.backgroundColor = "#ff0000";
+            nextBtn.onclick = function() { location.reload(); };
+        } else {
+            nextBtn.innerText = "Продължи (Картите отиват на Скамейката)";
+            nextBtn.onclick = function() {
+                document.getElementById("battle-result-modal").style.display = "none";
+                
+                // ----------------------------------------------------------------------
+                // ИЗЧИСТВАНЕ И ПРАЩАНЕ В СКАМЕЙКАТА
+                // ----------------------------------------------------------------------
+                let myCardsCleared = 0;
+                let enemyCardsCleared = 0;
+
+                // Изчистване на вражеското поле
+                document.querySelectorAll(".enemy-board-slot").forEach(slot => {
+                    if(slot.classList.contains("card-filled") || slot.classList.contains("card-back")) {
+                        enemyCardsCleared++;
+                    }
+                    let index = parseInt(slot.getAttribute("data-slot-index"));
+                    slot.innerHTML = "Слот " + (index + 1);
+                    // Връщаме слота в оригинален, празен вид
+                    slot.className = "card-slot enemy-board-slot"; 
+                });
+
+                // Изчистване на твоето поле
+                document.querySelectorAll(".my-board-slot").forEach(slot => {
+                    if(slot.classList.contains("card-filled")) {
+                        myCardsCleared++;
+                    }
+                    let index = parseInt(slot.getAttribute("data-slot-index"));
+                    slot.innerHTML = "Слот " + (index + 1);
+                    // Връщаме слота в оригинален, празен вид
+                    slot.className = "card-slot my-board-slot"; 
+                });
+
+                // Обновяваме визуално брояча на Скамейката
+                if (myCardsCleared > 0) {
+                    myBenchCount += myCardsCleared;
+                    document.getElementById("my-gy").classList.add("gy-filled");
+                    document.getElementById("my-gy").innerHTML = `СКАМЕЙКА<br/>(${myBenchCount})`;
+                }
+                if (enemyCardsCleared > 0) {
+                    enemyBenchCount += enemyCardsCleared;
+                    document.getElementById("enemy-gy").classList.add("gy-filled");
+                    document.getElementById("enemy-gy").innerHTML = `СКАМЕЙКА<br/>(${enemyBenchCount})`;
+                }
+                
+                myActiveTrap = null; // Изчистваме капана
+                currentRound++;
+                drawCardFromDeck(); // Теглиш нова карта
+                
+                if(enemyDeck.length > 0) {
+                    enemyDeck.pop(); updateDeckUI();
+                    document.getElementById("enemy-hand").innerHTML += '<div class="card-slot card-back"></div>';
+                }
+
+                startRoundFlow();
+            };
+        }
+        document.getElementById("battle-result-modal").style.display = "block";
+    }
+
+    function addNewCardToHand(cardObj) {
+        let handContainer = document.getElementById("my-hand-container");
+        let newCard = document.createElement("div");
+
+        let cssClass = cardObj.type === "Footballer" ? "card-footballer" :
+                       cardObj.type === "Spell" ? "card-spell" : "card-trap";
+
+        newCard.className = `card-slot card-filled ${cssClass}`;
+        newCard.style.cursor = "pointer";
+        newCard.setAttribute("data-type", cardObj.type);
+        newCard.setAttribute("data-fullcard", JSON.stringify(cardObj)); 
+
+        let statsHtml = cardObj.type === "Footballer" 
+            ? `ATK:${cardObj.atk}<br/>DEF:${cardObj.def}<br/>КОН:${cardObj.con}` 
+            : `Ефект:<br/>${cardObj.effect}`;
+
+        newCard.innerHTML = `
+            <div class="card-content">
+                <div class="card-title">${cardObj.name}</div>
+                <div class="card-stats">${statsHtml}</div>
+            </div>`;
+
+        handContainer.appendChild(newCard);
+        reloadHandClickEvents();
+    }
+
+    function clearHighlights() {
+        document.querySelectorAll(".my-board-slot").forEach(slot => slot.classList.remove("glow-slot"));
+    }
+
+    function reloadHandClickEvents() {
+        document.querySelectorAll(".my-hand .card-slot").forEach((card) => card.replaceWith(card.cloneNode(true)));
+        document.querySelectorAll(".my-hand .card-slot").forEach((card, index) => {
+            card.addEventListener("click", function () {
+                if (!isGameStarted || timeLeft <= 0) return;
+                
+                clearHighlights();
+                selectedCardElement = this;
+                selectedCardIndex = index;
+                
+                let cardType = this.getAttribute("data-type");
+                let targetRowId = cardType === "Footballer" ? "my-front-row" : "my-back-row";
+                
+                document.querySelectorAll("#" + targetRowId + " .my-board-slot:not(.card-filled)").forEach(slot => {
+                    slot.classList.add("glow-slot");
+                });
+            });
+        });
+    }
+
+    document.querySelectorAll(".my-board-slot").forEach(slot => {
+         slot.addEventListener("click", function () {
+             if (this.classList.contains("glow-slot") && selectedCardElement !== null) {
+                 
+                 let cardData = JSON.parse(selectedCardElement.getAttribute("data-fullcard"));
+                 
+                 // СПЕЛ ЗА ТЕГЛЕНЕ НА 2 КАРТИ
+                 if (cardData.type === "Spell" && cardData.effect === "Draw2") {
+                     alert("✨ Активираш Спел: ТЕГЛЕНЕ НА 2 КАРТИ!");
+                     drawCardFromDeck();
+                     drawCardFromDeck();
+                     
+                     // Отива директно на Скамейката
+                     myBenchCount++;
+                     document.getElementById("my-gy").classList.add("gy-filled");
+                     document.getElementById("my-gy").innerHTML = `СКАМЕЙКА<br/>(${myBenchCount})`;
+                     
+                     selectedCardElement.remove();
+                     selectedCardElement = null;
+                     clearHighlights();
+                     return; 
+                 }
+                 
+                 if (cardData.type === "Trap") {
+                     myActiveTrap = cardData; 
+                 }
+
+                 let boardIndex = parseInt(this.getAttribute("data-slot-index"));
+                 let myName = "@Model.Game.Player1.Name";
+                 
+                 connection.invoke("PlayCard", myName, selectedCardIndex, boardIndex, isFrontRowTarget)
+                     .catch(err => console.error(err.toString()));
+
+                 // -------------------------------------------------------------------
+                 // ФИКСЪТ Е ТУК: Добавяме + " my-board-slot", за да не губим слота!
+                 // -------------------------------------------------------------------
+                 this.className = selectedCardElement.className + " my-board-slot";
+                 
+                 this.classList.remove("glow-slot");
+                 this.innerHTML = selectedCardElement.innerHTML;
+
+                 selectedCardElement.remove();
+                 selectedCardElement = null;
+                 clearHighlights();
+
+                 if (cardData.type === "Spell" && cardData.effect === "Search") {
+                     document.getElementById("spell-search-modal").style.display = "block";
+                 }
+             }
+         });
+     });
+
+     document.getElementById("btn-draw-footballer").addEventListener("click", function() {
+         document.getElementById("spell-search-modal").style.display = "none";
+         addNewCardToHand({ name: "Изтеглен Скаут", type: "Footballer", atk: 90, def: 85, con: 80 });
+         alert("Изтеглихте Футболист! Тестето беше размесено! 🔄");
+         
+         // Спелът отива на Скамейката
+         myBenchCount++;
+         document.getElementById("my-gy").classList.add("gy-filled");
+         document.getElementById("my-gy").innerHTML = `СКАМЕЙКА<br/>(${myBenchCount})`;
+     });
+
+     document.getElementById("btn-draw-trap").addEventListener("click", function() {
+         document.getElementById("spell-search-modal").style.display = "none";
+         addNewCardToHand({ name: "Изтеглен Капан", type: "Trap", effect: "NegateAttack" });
+         alert("Изтеглихте Капан! Тестето беше размесено! 🔄");
+         
+         // Спелът отива на Скамейката
+         myBenchCount++;
+         document.getElementById("my-gy").classList.add("gy-filled");
+         document.getElementById("my-gy").innerHTML = `СКАМЕЙКА<br/>(${myBenchCount})`;
+     });
+
+    reloadHandClickEvents();
+</script>
+</body>
+</html>
