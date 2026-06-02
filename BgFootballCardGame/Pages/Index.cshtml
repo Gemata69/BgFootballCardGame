@@ -1,10 +1,54 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home - BG Football Card Game";
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/css/index.css" asp-append-version="true" />
+</head>
+<body>
+
+    <div id="intro-screen">
+        <div class="player-realistic"></div>
+        <div class="football" id="anim-ball"></div>
+        <div class="ready-text" id="anim-text">Are you ready?</div>
+    </div>
+
+    <div id="main-menu">
+        
+        <div class="showcase-container">
+            <div class="marquee-row scroll-right" id="row-top"></div>
+            <div class="marquee-row scroll-left" id="row-bottom"></div>
+        </div>
+
+        <div class="lang-switcher">
+            <a href="#" class="lang-btn active">BG</a>
+            <span class="lang-separator">|</span>
+            <a href="#" class="lang-btn">EN</a>
+        </div>
+
+        <div class="menu-container">
+            <h1 class="menu-logo">Football Card<br />Game </h1>
+            <p class="menu-subtitle">Official 2026 Edition</p>
+
+            
+                <a asp-page="/Board" class="btn-menu">Start Game</a>
+                <a href="#" class="btn-menu">Multiplayer</a>
+                <a href="#" class="btn-menu">Deck</a>
+                <a href="#" class="btn-menu">Store</a>
+                <a href="#" class="btn-menu">Settings</a>
+                <a href="#" class="btn-menu">Leave Game</a>
+        </div>
+    </div>
+
+    <script src="~/js/index.js"></script>
+
+</body>
+</html>
