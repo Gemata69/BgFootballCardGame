@@ -32,36 +32,32 @@ const playerDatabase = [
     { name: "Svetoslav Vutsov", team: "Левски", imgUrl: "/images/Vutsov.png", baseAtk: 15, baseDef: 89, baseCon: 60 }
 ];
 
-// 40 cards deck
+// 40 cards in one deck
 function createDeck() {
     let deck = [];
 
-    // 1. ФУТБОЛИСТИ: 23 броя
-    for (let i = 0; i < 23; i++) {
-        // Избираме случаен играч от нашата "база данни"
+    for (let i = 0; i < 26; i++) {
         let randomPlayer = playerDatabase[Math.floor(Math.random() * playerDatabase.length)];
 
         deck.push({
             name: randomPlayer.name,
             type: "Footballer",
-            // Добавяме лек случаен елемент към базовите статистики (симулация на "форма" на играча)
             atk: randomPlayer.baseAtk + Math.floor(Math.random() * 5),
             def: randomPlayer.baseDef + Math.floor(Math.random() * 5),
             con: randomPlayer.baseCon + Math.floor(Math.random() * 5),
-            // Засега ползваме снимката на Maicon за всички, докато не свалиш останалите!
             imgUrl: randomPlayer.imgUrl
         });
     }
 
-    // 2. СПЕЛОВЕ: Общо 7
-    for (let i = 0; i < 2; i++) deck.push({ name: "Стратегия: +2 Карти", type: "Spell", effect: "Draw2" });
-    for (let i = 0; i < 5; i++) deck.push({ name: "Скаутски Доклад", type: "Spell", effect: "Search" });
+    for (let i = 0; i < 2; i++) deck.push({ name: "Стратегия: +2 Карти", type: "Spell", effect: "Draw2" }); 
+    for (let i = 0; i < 2; i++) deck.push({ name: "Скаутски Доклад", type: "Spell", effect: "Search" }); 
+    for (let i = 0; i < 3; i++) deck.push({ name: "Мотивация", type: "Spell", effect: "+5 Точки" }); 
 
-    // 3. КАПАНИ: Общо 10
-    for (let i = 0; i < 5; i++) deck.push({ name: "Отрицание на Атака", type: "Trap", effect: "NegateAttack" });
-    for (let i = 0; i < 5; i++) deck.push({ name: "Засада", type: "Trap", effect: "-5 Точки" });
+    for (let i = 0; i < 2; i++) deck.push({ name: "Отрицание на Атака", type: "Trap", effect: "NegateAttack" });
+    for (let i = 0; i < 4; i++) deck.push({ name: "Засада", type: "Trap", effect: "-5 Точки" }); // ТУК ПРОМЕНИ 5 на 4
+    deck.push({ name: "Автогол", type: "Trap", effect: "Автогол" });
 
-    // Разбъркваме тестето
+    // Sort deck
     return deck.sort(() => Math.random() - 0.5);
 }
 
@@ -221,6 +217,17 @@ function startRoundFlow() {
                 let enemyHand = document.getElementById("enemy-hand");
                 if (enemyHand.lastElementChild) enemyHand.removeChild(enemyHand.lastElementChild);
             }
+
+            if (Math.random() < 0.40) {
+                let enemyBackRow = document.querySelectorAll("#enemy-back-row .enemy-board-slot:not(.card-back):not(.card-filled)");
+                if (enemyBackRow.length > 0) {
+                    let randomBackSlot = enemyBackRow[Math.floor(Math.random() * enemyBackRow.length)];
+                    randomBackSlot.classList.add("card-back", "enemy-hidden-spell"); 
+                    randomBackSlot.innerHTML = "";
+                    let enemyHand = document.getElementById("enemy-hand");
+                    if (enemyHand.lastElementChild) enemyHand.removeChild(enemyHand.lastElementChild);
+                }
+            }
         }
     }, enemyThinkTime);
 }
@@ -237,37 +244,54 @@ document.getElementById("btn-trap-no").addEventListener("click", function () {
 });
 
 function executeBattlePhase(userActivatedTrap) {
-    // Проверяваме дали играчите имат карти на ПРЕДНИЯ ред (Футболисти)
     let myPlayedCard = document.querySelector("#my-front-row .card-filled");
     let enemyPlayedCard = document.querySelector("#enemy-front-row .card-back, #enemy-front-row .card-filled");
 
     let details = "";
     let statusTitle = document.getElementById("battle-status");
 
-    // Обръщаме картата на противника
+    let myBasePoints = 0;
+    let enemyBasePoints = 0;
+    let enemyCardData = null;
+
     if (enemyPlayedCard) {
+        let randomEnemy = playerDatabase[Math.floor(Math.random() * playerDatabase.length)];
+
+        enemyCardData = {
+            name: randomEnemy.name,
+            atk: randomEnemy.baseAtk + Math.floor(Math.random() * 5),
+            def: randomEnemy.baseDef + Math.floor(Math.random() * 5),
+            con: randomEnemy.baseCon + Math.floor(Math.random() * 5),
+            imgUrl: randomEnemy.imgUrl || "/images/Maicon.png"
+        };
+
         enemyPlayedCard.classList.remove("card-back");
         enemyPlayedCard.classList.add("card-filled", "card-footballer");
+
         enemyPlayedCard.innerHTML = `
-                        <div class="card-content">
-                            <div class="card-title">Maicon (Противник)</div>
-                            <img src="/images/Maicon.png" class="card-image" alt="Enemy Player" />
-                            <div class="card-stats">
-                                <div class="stat-item"><span class="stat-label">ATT</span>82</div>
-                                <div class="stat-item"><span class="stat-label">DEF</span>80</div>
-                                <div class="stat-item"><span class="stat-label">CON</span>75</div>
-                            </div>
-                        </div>`;
+            <div class="card-content">
+                <div class="card-title">${enemyCardData.name}</div>
+                <div class="card-image-wrapper">
+                    <img src="${enemyCardData.imgUrl}" class="card-image" onerror="this.src='/images/Maicon.png'" alt="Enemy Player" />
+                </div>
+                <div class="card-textbox">
+                    <div class="card-description"><b>[Footballer / Effect]</b><br/>Противников играч.</div>
+                    <div class="card-stats">
+                        <span><span class="stat-label">ATK/</span>${enemyCardData.atk}</span>
+                        <span><span class="stat-label">DEF/</span>${enemyCardData.def}</span>
+                        <span><span class="stat-label">CON/</span>${enemyCardData.con}</span>
+                    </div>
+                </div>
+            </div>`;
     }
 
-    // ФИКСЪТ: Проверяваме ПЪРВО дали си пуснал Отрицание на Атаката!
     let isAttackNegated = (userActivatedTrap && myActiveTrap && myActiveTrap.effect === "NegateAttack");
 
     if (isAttackNegated) {
         statusTitle.innerText = "ЗАЩИТЕН!";
         statusTitle.style.color = "#00aaff";
         details += `🛑 <strong>Активиран капан: Отрицание на Атака!</strong><br/>`;
-        details += `<span style="color: #00aaff; font-size: 1.2em;">Атаката е напълно спряна! Ти не губиш жизнени точки, дори и да нямаш футболист на терена.</span><br/><br/>`;
+        details += `<span style="color: #00aaff; font-size: 1.2em;">Атаката е напълно спряна! Ти не губиш жизнени точки, дори и да нямаш футболист.</span><br/><br/>`;
 
         if (!enemyPlayedCard) {
             enemyLifePoints -= 3;
@@ -288,16 +312,50 @@ function executeBattlePhase(userActivatedTrap) {
         }
         details += `<span style="color: gray;">Битката се пропуска този рунд.</span>`;
     }
+    // Math battle phase
     else {
-        let myBasePoints = 85;
-        let enemyBasePoints = 82;
-
         let myCardDataStr = myPlayedCard.getAttribute("data-fullcard");
         if (myCardDataStr) {
             let myCardData = JSON.parse(myCardDataStr);
             if (currentMyStat === "АТАКА") myBasePoints = myCardData.atk;
             else if (currentMyStat === "ЗАЩИТА") myBasePoints = myCardData.def;
-            else myBasePoints = myCardData.con;
+            else if (currentMyStat === "КОНТРОЛ") myBasePoints = myCardData.con;
+        }
+
+        let myPlayedSpell = document.querySelector("#my-back-row .card-filled");
+        if (myPlayedSpell) {
+            let spellDataStr = myPlayedSpell.getAttribute("data-fullcard");
+            if (spellDataStr) {
+                let spellData = JSON.parse(spellDataStr);
+                if (spellData.effect === "+5 Точки") {
+                    myBasePoints += 5;
+                    details += `✨ <strong>Активиран спел: Мотивация!</strong> +5 точки за твоя футболист!<br/>`;
+                }
+            }
+        }
+
+        if (currentEnemyStat === "АТАКА") enemyBasePoints = enemyCardData.atk;
+        else if (currentEnemyStat === "ЗАЩИТА") enemyBasePoints = enemyCardData.def;
+        else if (currentEnemyStat === "КОНТРОЛ") enemyBasePoints = enemyCardData.con;
+
+        let enemyPlayedSpell = document.querySelector("#enemy-back-row .enemy-hidden-spell");
+        if (enemyPlayedSpell) {
+            if (enemyBasePoints <= myBasePoints || Math.random() < 0.2) {
+                let isMotivation = Math.random() < 0.5; 
+
+                enemyPlayedSpell.classList.remove("card-back", "enemy-hidden-spell");
+                enemyPlayedSpell.classList.add("card-filled", isMotivation ? "card-spell" : "card-trap");
+
+                if (isMotivation) {
+                    enemyBasePoints += 5; 
+                    details += `🤖✨ <strong>Противникът обърна Спел: Мотивация!</strong> Той получава +5 точки!<br/>`;
+                    enemyPlayedSpell.innerHTML = `<div class="card-content"><div class="card-title">Мотивация</div><div class="card-image-wrapper" style="background: radial-gradient(circle, #777, #222);"><div style="font-size: 5vh;">✨</div></div><div class="card-textbox"><div class="card-description" style="border-bottom: 1px solid #ccc;"><b>[Spell Card]</b></div><div class="card-description">+5 Точки</div></div></div>`;
+                } else {
+                    myBasePoints -= 5; 
+                    details += `🤖🚩 <strong>Противникът активира Капан: Засада!</strong> Твоят футболист губи 5 точки!<br/>`;
+                    enemyPlayedSpell.innerHTML = `<div class="card-content"><div class="card-title">Засада</div><div class="card-image-wrapper" style="background: radial-gradient(circle, #555, #111);"><div style="font-size: 5vh;">🚩</div></div><div class="card-textbox"><div class="card-description" style="border-bottom: 1px solid #ccc;"><b>[Trap Card]</b></div><div class="card-description">-5 Точки</div></div></div>`;
+                }
+            }
         }
 
         details += `Твоят футболист (${currentMyStat}): ${myBasePoints}<br/>`;
@@ -305,7 +363,7 @@ function executeBattlePhase(userActivatedTrap) {
 
         if (userActivatedTrap && myActiveTrap && myActiveTrap.effect === "-5 Точки") {
             enemyBasePoints -= 5;
-            details += `⚠️ <strong>Активира капан: Засада!</strong> -5 точки за противника!<br/><br/>`;
+            details += `🚩 <strong>Активира капан: Засада!</strong> Точките на противника падат на ${enemyBasePoints}!<br/><br/>`;
         }
 
         details += `<hr style="border-color: gray;" />`;
@@ -315,10 +373,19 @@ function executeBattlePhase(userActivatedTrap) {
             statusTitle.innerText = "WIN"; statusTitle.style.color = "#00ff00";
             enemyLifePoints -= 3;
             details += `<br/><br/><span style="color: #00ff00; font-size: 1.2em;">🔥 Противникът губи 3 жизнени точки!</span>`;
+
         } else if (myBasePoints < enemyBasePoints) {
-            statusTitle.innerText = "DEFEAT"; statusTitle.style.color = "#ff0000";
-            myLifePoints -= 3;
-            details += `<br/><br/><span style="color: #ff0000; font-size: 1.2em;">🩸 Ти губиш 3 жизнени точки!</span>`;
+
+            if (userActivatedTrap && myActiveTrap && myActiveTrap.effect === "Автогол") {
+                statusTitle.innerText = "АВТОГОЛ!"; statusTitle.style.color = "#ffaa00";
+                enemyLifePoints -= 3; 
+                details += `<br/><br/><span style="color: #ffaa00; font-size: 1.2em;">⚽❌ <strong>КАПАН АВТОГОЛ!</strong> Ти губиш битката по точки, НО противникът си отбелязва автогол! Вместо теб, ТОЙ губи 3 жизнени точки!</span>`;
+            } else {
+                statusTitle.innerText = "DEFEAT"; statusTitle.style.color = "#ff0000";
+                myLifePoints -= 3;
+                details += `<br/><br/><span style="color: #ff0000; font-size: 1.2em;">🩸 Ти губиш 3 жизнени точки!</span>`;
+            }
+
         } else {
             statusTitle.innerText = "DRAW"; statusTitle.style.color = "#aaaaaa";
             details += `<br/><br/><span style="color: gray; font-size: 1.2em;">⚖️ Равенство! Никой не губи точки.</span>`;
@@ -396,20 +463,34 @@ function addNewCardToHand(cardObj) {
     let innerContent = "";
 
     if (cardObj.type === "Footballer") {
+        let imgPath = cardObj.imgUrl || "/images/Maicon.png";
         innerContent = `
-                        <div class="card-title">${cardObj.name}</div>
-                        <img src="${cardObj.imgUrl}" class="card-image" alt="Player" />
-                        <div class="card-stats">
-                            <div class="stat-item"><span class="stat-label">ATT</span>${cardObj.atk}</div>
-                            <div class="stat-item"><span class="stat-label">DEF</span>${cardObj.def}</div>
-                            <div class="stat-item"><span class="stat-label">CON</span>${cardObj.con}</div>
-                        </div>`;
+            <div class="card-title">${cardObj.name}</div>
+            <div class="card-image-wrapper">
+                <img src="${imgPath}" class="card-image" onerror="this.src='/images/Maicon.png'" alt="Player" />
+            </div>
+            <div class="card-textbox">
+                <div class="card-description"><b>[Footballer / Effect]</b><br/>Основен играч.</div>
+                <div class="card-stats">
+                    <span><span class="stat-label">ATK/</span>${cardObj.atk}</span>
+                    <span><span class="stat-label">DEF/</span>${cardObj.def}</span>
+                    <span><span class="stat-label">CON/</span>${cardObj.con}</span>
+                </div>
+            </div>`;
     } else {
+        let typeTag = cardObj.type === "Spell" ? "[Spell Card]" : "[Trap Card]";
+        let currentEmoji = cardObj.type === "Spell" ? "✨" : (cardObj.name === "Засада" ? "🚩" : "🛑");
+        let gradient = cardObj.type === "Spell" ? "radial-gradient(circle, #777, #222)" : "radial-gradient(circle, #555, #111)";
+
         innerContent = `
-                        <div class="card-title">${cardObj.name}</div>
-                        <div class="card-stats" style="display: block; text-align: center; padding: 5px;">
-                            Ефект:<br/>${cardObj.effect}
-                        </div>`;
+            <div class="card-title">${cardObj.name}</div>
+            <div class="card-image-wrapper" style="background: ${gradient};">
+                <div style="font-size: 5vh;">${currentEmoji}</div>
+            </div>
+            <div class="card-textbox" style="justify-content: flex-start;">
+                <div class="card-description" style="margin-bottom: 2px; border-bottom: 1px solid #ccc; padding-bottom: 2px;"><b>${typeTag}</b></div>
+                <div class="card-description">${cardObj.effect}</div>
+            </div>`;
     }
 
     newCard.innerHTML = `<div class="card-content">${innerContent}</div>`;
@@ -446,43 +527,30 @@ document.querySelectorAll(".my-board-slot").forEach(slot => {
         if (this.classList.contains("glow-slot") && selectedCardElement !== null) {
 
             let cardData = JSON.parse(selectedCardElement.getAttribute("data-fullcard"));
+            let boardIndex = parseInt(this.getAttribute("data-slot-index"));
+            let myName = "@Model.Game.Player1.Name"; 
 
-            // DRAW 2 CARDS SPELL
-            if (cardData.type === "Spell" && cardData.effect === "Draw2") {
-                alert("✨ Активираш Спел: ТЕГЛЕНЕ НА 2 КАРТИ!");
-                drawCardFromDeck();
-                drawCardFromDeck();
+            connection.invoke("PlayCard", myName, selectedCardIndex, boardIndex, isFrontRowTarget)
+                .catch(err => console.error(err.toString()));
 
-                // Send spell directly to Bench
-                myBenchCount++;
-                document.getElementById("my-gy").classList.add("gy-filled");
-                document.getElementById("my-gy").innerHTML = `СКАМЕЙКА<br/>(${myBenchCount})`;
+            this.className = selectedCardElement.className + " my-board-slot";
+            this.classList.remove("glow-slot");
+            this.innerHTML = selectedCardElement.innerHTML;
+            this.setAttribute("data-fullcard", selectedCardElement.getAttribute("data-fullcard"));
 
-                selectedCardElement.remove();
-                selectedCardElement = null;
-                clearHighlights();
-                return;
-            }
+            selectedCardElement.remove();
+            selectedCardElement = null;
+            clearHighlights();
 
             if (cardData.type === "Trap") {
                 myActiveTrap = cardData;
             }
 
-            let boardIndex = parseInt(this.getAttribute("data-slot-index"));
-            let myName = "@Model.Game.Player1.Name";
-
-            connection.invoke("PlayCard", myName, selectedCardIndex, boardIndex, isFrontRowTarget)
-                .catch(err => console.error(err.toString()));
-
-            // FIX: Add " my-board-slot" to avoid losing the slot reference!
-            this.className = selectedCardElement.className + " my-board-slot";
-
-            this.classList.remove("glow-slot");
-            this.innerHTML = selectedCardElement.innerHTML;
-
-            selectedCardElement.remove();
-            selectedCardElement = null;
-            clearHighlights();
+            if (cardData.type === "Spell" && cardData.effect === "Draw2") {
+                alert("✨ Активираш Спел: ТЕГЛЕНЕ НА 2 КАРТИ!");
+                drawCardFromDeck();
+                drawCardFromDeck();
+            }
 
             if (cardData.type === "Spell" && cardData.effect === "Search") {
                 document.getElementById("spell-search-modal").style.display = "block";
@@ -495,22 +563,12 @@ document.getElementById("btn-draw-footballer").addEventListener("click", functio
     document.getElementById("spell-search-modal").style.display = "none";
     addNewCardToHand({ name: "Изтеглен Скаут", type: "Footballer", atk: 90, def: 85, con: 80 });
     alert("Изтеглихте Футболист! Тестето беше размесено! 🔄");
-
-    // Spell goes to Bench
-    myBenchCount++;
-    document.getElementById("my-gy").classList.add("gy-filled");
-    document.getElementById("my-gy").innerHTML = `СКАМЕЙКА<br/>(${myBenchCount})`;
 });
 
 document.getElementById("btn-draw-trap").addEventListener("click", function () {
     document.getElementById("spell-search-modal").style.display = "none";
     addNewCardToHand({ name: "Изтеглен Капан", type: "Trap", effect: "NegateAttack" });
     alert("Изтеглихте Капан! Тестето беше размесено! 🔄");
-
-    // Spell goes to Bench
-    myBenchCount++;
-    document.getElementById("my-gy").classList.add("gy-filled");
-    document.getElementById("my-gy").innerHTML = `СКАМЕЙКА<br/>(${myBenchCount})`;
 });
 
 reloadHandClickEvents();
