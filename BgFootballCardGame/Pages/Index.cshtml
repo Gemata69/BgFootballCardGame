@@ -4,183 +4,25 @@
     ViewData["Title"] = "Home - BG Football Card Game";
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <style>
-        /* -- GENERAL STYLES -- */
-        body, html {
-            margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #050505; color: white;
-        }
-
-        /* -- INTRO SCREEN -- */
-        #intro-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at center, #0a1930, #000 80%);
-            z-index: 9999; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; transition: opacity 1s ease-in-out; perspective: 1200px; 
-        }
-
-        .player-realistic {
-            width: 400px; height: 400px; background: url('/images/kicker.png') no-repeat center bottom;
-            background-size: contain; filter: drop-shadow(0 10px 20px rgba(0, 85, 255, 0.3));
-            animation: playerAction 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            animation-delay: 0.5s; position: absolute; bottom: 20%;
-        }
-
-        .football {
-            position: absolute; width: 40px; height: 40px; border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #fff, #555);
-            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5);
-            top: 55%; left: 48%; opacity: 0;
-        }
-        .football::after { content: "⚽"; font-size: 40px; line-height: 40px; position: absolute; top: -2px; left: 0; opacity: 0.6; }
-
-        .ready-text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 6vw; font-weight: 900; text-transform: uppercase; letter-spacing: 8px;
-            color: #ffffff; text-shadow: 0 0 20px #ffd700, 0 0 40px #ffaa00;
-            opacity: 0; z-index: 10; white-space: nowrap; text-align: center; width: 100%;
-        }
-
-        @@keyframes playerAction {
-            0% { transform: translateX(0) scale(1); }
-            50% { transform: translateX(30px) scale(1.05); }
-            100% { transform: translateX(15px) scale(1); opacity: 0.2; }
-        }
-        .kick-ball { opacity: 1 !important; animation: ballFlyToScreen 1.5s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
-        @@keyframes ballFlyToScreen {
-            0% { transform: translateZ(0) scale(1) rotate(0deg); }
-            100% { transform: translateZ(800px) scale(15) rotate(720deg) translateY(-2vh); }
-        }
-        .show-text { animation: textFadeInPulse 2s ease-out forwards; }
-        @@keyframes textFadeInPulse {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        }
-
-        /* -- MAIN MENU -- */
-        #main-menu {
-            position: relative; width: 100vw; height: 100vh;
-            background: linear-gradient(to right, rgba(0,0,0,0.95) 15%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.2) 100%), 
-                        url('https://images.unsplash.com/photo-1518605368461-1ee7e53f7c46?q=80&w=2000&auto=format&fit=crop') no-repeat center center;
-            background-size: cover; display: flex; align-items: center; justify-content: flex-start; 
-            padding-left: 15vw; opacity: 0; transition: opacity 1.5s ease-in; box-sizing: border-box; overflow: hidden;
-        }
-
-        /* -- LANGUAGE SWITCHER -- */
-        .lang-switcher {
-            position: absolute; top: 30px; right: 30px; display: flex; gap: 15px; align-items: center;
-            background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(10px); padding: 10px 25px;
-            border-radius: 30px; border: 1px solid rgba(255, 215, 0, 0.3); box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 1000;
-        }
-        .lang-btn { text-decoration: none; color: #aaaaaa; font-weight: bold; font-size: 1.2rem; transition: all 0.3s ease; }
-        .lang-btn:hover { color: #ffffff; text-shadow: 0 0 10px white; }
-        .lang-btn.active { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
-        .lang-separator { color: #555; font-size: 1.2rem; }
-
-        /* -- MENU BUTTONS -- */
-        .menu-container { display: flex; flex-direction: column; gap: 15px; width: 350px; z-index: 10; }
-        .menu-logo { font-size: 3rem; font-weight: 900; margin-bottom: 5px; background: linear-gradient(135deg, #ffd700, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 2px; line-height: 1.1; }
-        .menu-subtitle { color: #aaa; font-size: 1rem; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
-        .btn-menu {
-            display: block; text-decoration: none; padding: 15px 25px; font-size: 1.4rem; font-weight: bold;
-            border-radius: 8px; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease;
-            cursor: pointer; text-align: left; background: rgba(255, 255, 255, 0.05); color: white;
-            border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px);
-        }
-        .btn-menu:hover {
-            background: rgba(255, 215, 0, 0.2); border-color: #ffd700; color: #ffd700;
-            transform: translateX(15px); padding-left: 35px; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        }
-
-        /* -- SHOWCASE LAYOUT -- */
-        .showcase-container {
-            position: absolute; right: -5vw; top: 0; width: 60vw; height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; gap: 6vh; z-index: 1;
-            transform: perspective(1000px) rotateY(-15deg);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 100%);
-            mask-image: linear-gradient(to right, transparent 0%, black 20%, black 100%);
-        }
-        .marquee-row { display: flex; gap: 2vw; width: max-content; align-items: center; }
-        .scroll-right { animation: scrollRight 40s linear infinite; }
-        .scroll-left { animation: scrollLeft 40s linear infinite; }
-        @@keyframes scrollRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0%); } }
-        @@keyframes scrollLeft { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
-
-        /* ----------------------------------------------------------------------
-           EXACT GAME CARD STYLES (Yu-Gi-Oh! Style - Taller & Red/Yellow)
-           ---------------------------------------------------------------------- */
-        .card-slot {
-            width: 11vw;
-            height: 28vh; /* Увеличена височина за по-реалистична Yu-Gi-Oh пропорция */
-            border-radius: 3px;
-            border: 4px solid #111; 
-            display: flex; align-items: center; justify-content: center;
-            box-sizing: border-box; box-shadow: 0 10px 20px rgba(0,0,0,0.8);
-            transform: scale(1); transition: 0.3s; padding: 4px;
-        }
-        .card-slot:hover { transform: scale(1.1) translateY(-10px); z-index: 50; }
-
-        /* Classic YGO Backgrounds (Updated per user request) */
-        .card-footballer { background: #d8a05b; } /* Orange/Brown */
-        .card-spell { background: #eacb28; } /* Yellow */
-        .card-trap { background: #c62828; } /* Red */
-
-        .card-content { 
-            display: flex; flex-direction: column; height: 100%; width: 100%; box-sizing: border-box; 
-        }
-
-        /* YGO Title Box */
-        .card-title {
-            font-weight: bold; font-family: 'Times New Roman', serif; font-size: 1.2vh;
-            width: 100%; text-transform: uppercase; white-space: nowrap; overflow: hidden;
-            text-overflow: ellipsis; text-align: left; color: #000;
-            background: linear-gradient(to bottom, #fdfdfd, #a0a0a0);
-            border: 1px solid #333; padding: 2px 4px; box-shadow: inset 1px 1px 2px white;
-            margin-bottom: 3px; box-sizing: border-box;
-        }
-
-        /* YGO Image Frame */
-        .card-image-wrapper {
-            width: 100%; flex-grow: 1; border: 3px solid #888;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.8), 0 0 2px black;
-            margin-bottom: 4px; display: flex; align-items: center; justify-content: center;
-            background-color: #eee; overflow: hidden; box-sizing: border-box;
-        }
-        .card-image { width: 100%; height: 100%; object-fit: cover; } 
-
-        /* YGO Text / Effect Box (Parchment color) */
-        .card-textbox {
-            background-color: #f7eecb; border: 2px solid #555; width: 100%; min-height: 6vh;
-            padding: 3px 4px; display: flex; flex-direction: column; justify-content: space-between;
-            box-sizing: border-box;
-        }
-        .card-description {
-            font-family: 'Times New Roman', serif; font-size: 1vh; color: #111; text-align: left; line-height: 1.1;
-        }
-        
-        /* Stats at the bottom right */
-        .card-stats { 
-            font-size: 1.1vh; color: #000; display: flex; justify-content: flex-end; gap: 6px;
-            border-top: 1px solid #ccc; padding-top: 2px; margin-top: 2px; font-family: 'Segoe UI', Tahoma, sans-serif; font-weight: bold;
-        }
-        .stat-label { color: #000; font-size: 0.9vh; }
-    </style>
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 </head>
 <body>
+    <div id="start-game-overlay">
+        <span>Click to start</span>
+    </div>
 
     <div id="intro-screen">
         <div class="player-realistic"></div>
         <div class="football" id="anim-ball"></div>
         <div class="ready-text" id="anim-text">Are you ready?</div>
+        
+        <audio id="glass-sound" src="/audio/broke_glass.mp3" preload="auto"></audio>
     </div>
 
     <div id="main-menu">
@@ -197,7 +39,7 @@
         </div>
 
         <div class="menu-container">
-            <h1 class="menu-logo">Football Card<br/>Game BG</h1>
+            <h1 class="menu-logo">Football Card<br />Game BG</h1>
             <p class="menu-subtitle">Official 2026 Edition</p>
             
             <a asp-page="/Board" class="btn-menu">Start Game</a>
@@ -210,89 +52,114 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Intro
-            const ball = document.getElementById("anim-ball");
-            const text = document.getElementById("anim-text");
-            const introScreen = document.getElementById("intro-screen");
-            const mainMenu = document.getElementById("main-menu");
+            document.addEventListener("DOMContentLoaded", function () {
+                // Intro
+                const ball = document.getElementById("anim-ball");
+                const text = document.getElementById("anim-text");
+                const introScreen = document.getElementById("intro-screen");
+                const mainMenu = document.getElementById("main-menu");
 
-            setTimeout(() => { ball.classList.add("kick-ball"); }, 600); 
-            setTimeout(() => { text.classList.add("show-text"); }, 1800);
-            setTimeout(() => {
-                introScreen.style.opacity = "0";
-                mainMenu.style.opacity = "1";
-                setTimeout(() => { introScreen.style.display = "none"; }, 1000);
-            }, 4500);
+                const glassSound = document.getElementById("glass-sound");
+                const startOverlay = document.getElementById("start-game-overlay");
 
-            // ---------------------------------------------------------
-            // Yu-Gi-Oh! CARD SHOWCASE GENERATOR
-            // ---------------------------------------------------------
-            // Добавихме 'emoji' пропърти към спеловете и капаните!
-            const sampleCards = [
-                { type: "Footballer", name: "Mustafa Sangare", img: "/images/Sangare.png", atk: 88, def: 35, con: 72 },
-                { type: "Footballer", name: "Maicon", img: "/images/Maicon.png", atk: 72, def: 80, con: 75 },
-                { type: "Spell", name: "Стратегия: +2", effect: "Теглиш 2 допълнителни карти.", emoji: "🪄" },
-                { type: "Trap", name: "Отрицание", effect: "Спира атаката на противника!", emoji: "🛑" },
-                { type: "Footballer", name: "Radoslav Kirilov", img: "/images/Kirilov.png", atk: 83, def: 45, con: 80 },
-                { type: "Footballer", name: "Svetoslav Vutsov", img: "/images/Vutsov.png", atk: 15, def: 89, con: 60 },
-                { type: "Spell", name: "Скаутски Доклад", effect: "Търсиш специфичен играч в тестето.", emoji: "🔍" },
-                { type: "Trap", name: "Засада", effect: "Нанася -5 Точки щета на врага.", emoji: "🚩" } // Offside флаг!
-            ];
+                if (startOverlay) {
+                    startOverlay.addEventListener("click", function () {
 
-            // Тази функция създава точния Yu-Gi-Oh HTML
-            function generateCardHTML(card) {
-                if (card.type === "Footballer") {
-                    let imgPath = card.img || "/images/Maicon.png"; 
-                    return `
-                        <div class="card-slot card-footballer">
-                            <div class="card-content">
-                                <div class="card-title">${card.name}</div>
-                                <div class="card-image-wrapper">
-                                    <img src="${imgPath}" class="card-image" onerror="this.src='/images/Maicon.png'" alt="Player" />
-                                </div>
-                                <div class="card-textbox">
-                                    <div class="card-description"><b>[Footballer / Effect]</b><br/>Основен играч.</div>
-                                    <div class="card-stats">
-                                        <span><span class="stat-label">ATK/</span>${card.atk}</span>
-                                        <span><span class="stat-label">DEF/</span>${card.def}</span>
-                                        <span><span class="stat-label">CON/</span>${card.con}</span>
+                        if (glassSound) {
+                            glassSound.volume = 0; 
+                            glassSound.play().then(() => {
+                                glassSound.pause();
+                                glassSound.currentTime = 0;
+                                glassSound.volume = 1.0; 
+                            }).catch(e => console.log(e));
+                        }
+
+                        startOverlay.style.display = "none";
+
+                        setTimeout(() => { ball.classList.add("kick-ball"); }, 600);
+
+                        setTimeout(() => {
+                            introScreen.classList.add("cracked");
+                            introScreen.style.animation = "screenBreak 0.5s ease-out forwards";
+                            ball.style.display = "none";
+
+                            if (glassSound) {
+                                glassSound.play().catch(e => console.log("Браузърът блокира звука:", e));
+                            }
+                        }, 2000);
+
+                        setTimeout(() => { text.classList.add("show-text"); }, 2400);
+
+                        setTimeout(() => {
+                            introScreen.style.opacity = "0";
+                            mainMenu.style.opacity = "1";
+                            setTimeout(() => { introScreen.style.display = "none"; }, 1000);
+                        }, 5000);
+                    });
+                }
+
+                // Yu-Gi-Oh! CARD SHOWCASE GENERATOR
+                const sampleCards = [
+                    { type: "Footballer", name: "Mustafa Sangare", img: "/images/Sangare.png", atk: 88, def: 35, con: 72 },
+                    { type: "Footballer", name: "Maicon", img: "/images/Maicon.png", atk: 72, def: 80, con: 75 },
+                    { type: "Spell", name: "Стратегия: +2", effect: "Теглиш 2 допълнителни карти.", emoji: "🪄" },
+                    { type: "Trap", name: "Отрицание", effect: "Спира атаката на противника!", emoji: "🛑" },
+                    { type: "Footballer", name: "Radoslav Kirilov", img: "/images/Kirilov.png", atk: 83, def: 45, con: 80 },
+                    { type: "Footballer", name: "Svetoslav Vutsov", img: "/images/Vutsov.png", atk: 15, def: 89, con: 60 },
+                    { type: "Spell", name: "Скаутски Доклад", effect: "Търсиш специфичен играч в тестето.", emoji: "🔍" },
+                    { type: "Trap", name: "Засада", effect: "Нанася -5 Точки щета на врага.", emoji: "🚩" }
+                ];
+
+                function generateCardHTML(card) {
+                    if (card.type === "Footballer") {
+                        let imgPath = card.img || "/images/Maicon.png";
+                        return `
+                            <div class="card-slot card-footballer">
+                                <div class="card-content">
+                                    <div class="card-title">${card.name}</div>
+                                    <div class="card-image-wrapper">
+                                        <img src="${imgPath}" class="card-image" onerror="this.src='/images/Maicon.png'" alt="Player" />
+                                    </div>
+                                    <div class="card-textbox">
+                                        <div class="card-description"><b>[Footballer / Effect]</b><br/>Основен играч.</div>
+                                        <div class="card-stats">
+                                            <span><span class="stat-label">ATK/</span>${card.atk}</span>
+                                            <span><span class="stat-label">DEF/</span>${card.def}</span>
+                                            <span><span class="stat-label">CON/</span>${card.con}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>`;
-                } else {
-                    let cssClass = card.type === "Spell" ? "card-spell" : "card-trap";
-                    let typeTag = card.type === "Spell" ? "[Spell Card]" : "[Trap Card]";
-                    
-                    // Взимаме емоджито от масива (или слагаме дефолтно ако липсва)
-                    let currentEmoji = card.emoji || (card.type === "Spell" ? "✨" : "⚠️");
-                    
-                    return `
-                        <div class="card-slot ${cssClass}">
-                            <div class="card-content">
-                                <div class="card-title">${card.name}</div>
-                                <div class="card-image-wrapper" style="background: radial-gradient(circle, #777, #222);">
-                                    <div style="font-size: 6vh;">${currentEmoji}</div>
+                            </div>`;
+                    } else {
+                        let cssClass = card.type === "Spell" ? "card-spell" : "card-trap";
+                        let typeTag = card.type === "Spell" ? "[Spell Card]" : "[Trap Card]";
+                        let currentEmoji = card.emoji || (card.type === "Spell" ? "✨" : "⚠️");
+
+                        return `
+                            <div class="card-slot ${cssClass}">
+                                <div class="card-content">
+                                    <div class="card-title">${card.name}</div>
+                                    <div class="card-image-wrapper" style="background: radial-gradient(circle, #777, #222);">
+                                        <div style="font-size: 6vh;">${currentEmoji}</div>
+                                    </div>
+                                    <div class="card-textbox" style="justify-content: flex-start;">
+                                        <div class="card-description" style="margin-bottom: 4px; border-bottom: 1px solid #ccc; padding-bottom: 2px;"><b>${typeTag}</b></div>
+                                        <div class="card-description">${card.effect}</div>
+                                    </div>
                                 </div>
-                                <div class="card-textbox" style="justify-content: flex-start;">
-                                    <div class="card-description" style="margin-bottom: 4px; border-bottom: 1px solid #ccc; padding-bottom: 2px;"><b>${typeTag}</b></div>
-                                    <div class="card-description">${card.effect}</div>
-                                </div>
-                            </div>
-                        </div>`;
+                            </div>`;
+                    }
                 }
-            }
 
-            let cardsHTML = sampleCards.map(generateCardHTML).join("");
-            let endlessHTML = cardsHTML + cardsHTML + cardsHTML + cardsHTML;
+                let cardsHTML = sampleCards.map(generateCardHTML).join("");
+                let endlessHTML = cardsHTML + cardsHTML + cardsHTML + cardsHTML;
 
-            document.getElementById("row-top").innerHTML = endlessHTML;
-            
-            let reversedCardsHTML = sampleCards.slice().reverse().map(generateCardHTML).join("");
-            let endlessReversedHTML = reversedCardsHTML + reversedCardsHTML + reversedCardsHTML + reversedCardsHTML;
-            document.getElementById("row-bottom").innerHTML = endlessReversedHTML;
-        });
+                document.getElementById("row-top").innerHTML = endlessHTML;
+
+                let reversedCardsHTML = sampleCards.slice().reverse().map(generateCardHTML).join("");
+                let endlessReversedHTML = reversedCardsHTML + reversedCardsHTML + reversedCardsHTML + reversedCardsHTML;
+                document.getElementById("row-bottom").innerHTML = endlessReversedHTML;
+            });
     </script>
 
 </body>

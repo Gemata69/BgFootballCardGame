@@ -41,24 +41,37 @@ body, html {
 
 .football {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle at 30% 30%, #fff, #555);
-    border-radius: 50%;
-    box-shadow: inset -5px -5px 15px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5);
-    top: 55%;
-    left: 48%;
+    width: 800px; 
+    height: 800px;
+    top: 50%;
+    left: 50%;
+    margin-top: -400px; 
+    margin-left: -400px; 
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 100;
+    will-change: transform; 
     opacity: 0;
 }
 
     .football::after {
         content: "⚽";
-        font-size: 40px;
-        line-height: 40px;
-        position: absolute;
-        top: -2px;
-        left: 0;
-        opacity: 0.6;
+        font-size: 800px; 
+        line-height: 800px;
+        filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
+    }
+
+    .football,
+    .football *,
+    .football::before,
+    .football::after {
+        background: transparent !important;
+        background-color: transparent !important;
     }
 
 .ready-text {
@@ -79,7 +92,6 @@ body, html {
     width: 100%;
 }
 
-/* -- INTRO ANIMATIONS -- */
 @keyframes playerAction {
     0% {
         transform: translateX(0) scale(1);
@@ -97,16 +109,79 @@ body, html {
 
 .kick-ball {
     opacity: 1 !important;
-    animation: ballFlyToScreen 1.5s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+    animation: ballFlyToScreen 1.4s cubic-bezier(0.3, 0, 0.8, 1) forwards;
 }
 
 @keyframes ballFlyToScreen {
     0% {
-        transform: translateZ(0) scale(1) rotate(0deg);
+        transform: scale(0.05) rotate(0deg) translateY(4000px);
     }
 
     100% {
-        transform: translateZ(800px) scale(15) rotate(720deg) translateY(-2vh);
+        transform: scale(1) rotate(720deg) translateY(-50px);
+    }
+}
+
+#intro-screen.cracked {
+    animation: screenBreak 0.5s ease-out forwards;
+}
+
+    #intro-screen.cracked::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('/images/brokenglass.jpeg');
+        background-size: cover;
+        background-position: center;
+        mix-blend-mode: screen;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 10000;
+        animation: crackAppear 0.1s ease-out forwards; 
+    }
+
+    #intro-screen.cracked::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.4) 85%, rgba(0, 0, 0, 0.7) 100%);
+        pointer-events: none;
+        z-index: 10001;
+    }
+
+@keyframes crackAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes screenBreak {
+    0% {
+        transform: scale(1);
+    }
+
+    20% {
+        transform: scale(1.05);
+        filter: brightness(1.5);
+    }
+    40% {
+        transform: scale(0.98);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }
 
@@ -131,7 +206,7 @@ body, html {
     }
 }
 
-/* -- MAIN MENU LAYOUT -- */
+/* -- MAIN MENU -- */
 #main-menu {
     position: relative;
     width: 100vw;
@@ -158,7 +233,6 @@ body, html {
     align-items: center;
     background: rgba(20, 20, 20, 0.6);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: 10px 25px;
     border-radius: 30px;
     border: 1px solid rgba(255, 215, 0, 0.3);
@@ -208,11 +282,6 @@ body, html {
     text-transform: uppercase;
     letter-spacing: 2px;
     line-height: 1.1;
-    min-width:2000px;
-}
-
-.second-menu {
-    margin-left: 20px;
 }
 
 .menu-subtitle {
@@ -235,8 +304,6 @@ body, html {
     transition: all 0.3s ease;
     cursor: pointer;
     text-align: left;
-    position: relative;
-    overflow: hidden;
     background: rgba(255, 255, 255, 0.05);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -252,7 +319,51 @@ body, html {
         box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
     }
 
-/* -- BACKGROUND ANIMATED CARDS SHOWCASE -- */
+
+#start-game-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #050505;
+    z-index: 999999; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffd700;
+    font-size: 3rem;
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+    #start-game-overlay span {
+        animation: pulseText 1.5s infinite;
+    }
+
+@keyframes pulseText {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0);
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0);
+    }
+}
+
+/* -- SHOWCASE LAYOUT -- */
 .showcase-container {
     position: absolute;
     right: -5vw;
@@ -273,6 +384,7 @@ body, html {
     display: flex;
     gap: 2vw;
     width: max-content;
+    align-items: center;
 }
 
 .scroll-right {
@@ -303,11 +415,12 @@ body, html {
     }
 }
 
-/* -- EXACT GAME CARD STYLES -- */
+/* EXACT GAME CARD STYLES (Yu-Gi-Oh! Style - Taller & Red/Yellow) */
 .card-slot {
-    width: 10vw;
-    height: 18vh;
-    border-radius: 8px;
+    width: 11vw;
+    height: 28vh;
+    border-radius: 3px;
+    border: 4px solid #111;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -315,6 +428,7 @@ body, html {
     box-shadow: 0 10px 20px rgba(0,0,0,0.8);
     transform: scale(1);
     transition: 0.3s;
+    padding: 4px;
 }
 
     .card-slot:hover {
@@ -322,79 +436,100 @@ body, html {
         z-index: 50;
     }
 
+/* Classic YGO Backgrounds */
+.card-footballer {
+    background: #d8a05b;
+}
+
+.card-spell {
+    background: #eacb28;
+}
+
+.card-trap {
+    background: #c62828;
+}
+
 .card-content {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
     height: 100%;
     width: 100%;
-    padding: 5px;
     box-sizing: border-box;
 }
 
 .card-title {
     font-weight: bold;
-    font-size: 1.3vh;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-    padding-bottom: 2px;
+    font-family: 'Times New Roman', serif;
+    font-size: 1.2vh;
     width: 100%;
     text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: center;
-    color: inherit;
+    text-align: left;
+    color: #000;
+    background: linear-gradient(to bottom, #fdfdfd, #a0a0a0);
+    border: 1px solid #333;
+    padding: 2px 4px;
+    box-shadow: inset 1px 1px 2px white;
+    margin-bottom: 3px;
+    box-sizing: border-box;
+}
+
+.card-image-wrapper {
+    width: 100%;
+    flex-grow: 1;
+    border: 3px solid #888;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.8), 0 0 2px black;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .card-image {
     width: 100%;
-    height: 8vh;
-    object-fit: contain;
-    filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.6));
-    margin: 2px 0;
+    height: 100%;
+    object-fit: cover;
 }
 
-.card-stats {
-    font-size: 1.2vh;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 3px;
-    border-radius: 4px;
-    width: 95%;
+.card-textbox {
+    background-color: #f7eecb;
+    border: 2px solid #555;
+    width: 100%;
+    min-height: 6vh;
+    padding: 3px 4px;
     display: flex;
-    justify-content: space-around;
-    border: 1px solid #d4af37;
+    flex-direction: column;
+    justify-content: space-between;
     box-sizing: border-box;
 }
 
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.card-description {
+    font-family: 'Times New Roman', serif;
+    font-size: 1vh;
+    color: #111;
+    text-align: left;
     line-height: 1.1;
+}
+
+.card-stats {
+    font-size: 1.1vh;
+    color: #000;
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    border-top: 1px solid #ccc;
+    padding-top: 2px;
+    margin-top: 2px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
     font-weight: bold;
 }
 
 .stat-label {
+    color: #000;
     font-size: 0.9vh;
-    color: #ffd700;
-}
-
-.card-footballer {
-    background: linear-gradient(135deg, #ffd700 0%, #d4af37 50%, #b8860b 100%);
-    border: 2px solid #fff8dc;
-    color: #333;
-}
-
-.card-spell {
-    background: linear-gradient(135deg, #13547a 0%, #80d0c7 100%);
-    border: 2px solid #00ffff;
-    color: white;
-}
-
-.card-trap {
-    background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
-    border: 2px solid #ff00ff;
-    color: white;
 }
