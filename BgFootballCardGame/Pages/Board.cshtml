@@ -76,67 +76,83 @@
         </div>
     </div>
 
-    @* 3D field *@
-    <div class="board-container">
+        @* 3D field *@
+        <div class="board-container">
         
-        @* Enenmy zone *@
-        <div class="player-zone">
-            <div style="display: flex; justify-content: space-between; width: 60%; align-items: center; margin-bottom: 1vh;">
-                <h4 style="color: #ccc; margin: 0;">Ръка на Противника</h4>
-                <div class="card-row" id="enemy-hand" style="margin: 0; transform: scale(0.6); transform-origin: right;">
-                </div>
+            <div class="enemy-hp-container">
+                <h3 style="margin: 0; font-size: 1.2vw;">@Model.Game.Player2.Name<br /><span style="color: #aaa; font-size: 0.8em;">Жизнени точки:</span> <span id="enemy-lp" style="color: #ff4444; font-size: 1.2em;">30</span></h3>
             </div>
-            <h3>@Model.Game.Player2.Name - Жизнени точки: <span id="enemy-lp" style="color: #ff4444;">30</span></h3>
+
+            @* Enemy zone *@
+            <div class="player-zone">
+                <div style="display: flex; justify-content: space-between; width: 60%; align-items: center; margin-bottom: 1vh;">
+                    <h4 style="color: #ccc; margin: 0;">Ръка на Противника</h4>
+                    <div class="card-row" id="enemy-hand" style="margin: 0; transform: scale(0.6); transform-origin: right;"></div>
+                </div>
             
-            <div style="display: flex; gap: 2vw; align-items: center; justify-content: center; width: 100%;">
-                @* Enemy subs and deck *@
-                <div style="display: flex; flex-direction: column; gap: 1vh;">
-                    <div class="gy-zone" id="enemy-gy">СКАМЕЙКА<br/>(0)</div>
-                    <div class="deck-zone">ТЕСТЕ</div>
-                </div>
-                
-                <div class="field-3d" style="transform: rotateX(-15deg);">
-                    <div class="card-row" id="enemy-back-row">
-                        @for (int i = 0; i < 5; i++) { <div class="card-slot enemy-board-slot" data-slot-index="@i">Слот @(i + 1)</div> }
+                <div style="display: flex; gap: 2vw; align-items: center; justify-content: center; width: 100%;">
+                    @* Enemy subs and deck *@
+                    <div style="display: flex; flex-direction: column; gap: 1vh;">
+                        <div class="gy-zone" id="enemy-gy">СКАМЕЙКА<br />(0)</div>
+                        <div class="deck-zone">ТЕСТЕ</div>
                     </div>
-                    <div class="card-row" id="enemy-front-row">
-                        @for (int i = 0; i < 5; i++) { <div class="card-slot enemy-board-slot" data-slot-index="@i">Слот @(i + 1)</div> }
+                
+                    <div class="field-3d">
+                        <div class="card-row" id="enemy-back-row">
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                <div class="card-slot enemy-board-slot" data-slot-index="@i">Слот @(i + 1)</div>
+                            }
+                        </div>
+                        <div class="card-row" id="enemy-front-row">
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                <div class="card-slot enemy-board-slot" data-slot-index="@i">Слот @(i + 1)</div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <hr style="width: 80%; border-color: rgba(255,255,255,0.3); margin: 2vh 0;" />
+            <hr style="width: 80%; border-color: rgba(255,255,255,0.3); margin: 2vh 0;" />
 
-        @* My zone *@
-        <div class="player-zone">
-            <div style="display: flex; gap: 2vw; align-items: center; justify-content: center; width: 100%;">
+            <div class="my-hp-container">
+                <h3 style="margin: 0; font-size: 1.2vw;">@Model.Game.Player1.Name<br /><span style="color: #aaa; font-size: 0.8em;">Жизнени точки:</span> <span id="my-lp" style="color: #44ff44; font-size: 1.2em;">30</span></h3>
+            </div>
+
+            @* My zone *@
+            <div class="player-zone">
+                <div style="display: flex; gap: 2vw; align-items: center; justify-content: center; width: 100%;">
                 
-                <div class="field-3d">
-                    <div class="card-row" id="my-front-row">
-                        @for (int i = 0; i < 5; i++) { <div class="card-slot my-board-slot" data-slot-index="@i">Слот @(i + 1)</div> }
+                    <div class="field-3d">
+                        <div class="card-row" id="my-front-row">
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                <div class="card-slot my-board-slot" data-slot-index="@i">Слот @(i + 1)</div>
+                            }
+                        </div>
+                        <div class="card-row" id="my-back-row">
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                <div class="card-slot my-board-slot" data-slot-index="@i">Слот @(i + 1)</div>
+                            }
+                        </div>
                     </div>
-                    <div class="card-row" id="my-back-row">
-                        @for (int i = 0; i < 5; i++) { <div class="card-slot my-board-slot" data-slot-index="@i">Слот @(i + 1)</div> }
-                    </div>
-                </div>
 
-                @* My subs and deck *@
-                <div style="display: flex; flex-direction: column; gap: 1vh;">
-                    <div class="deck-zone">ТЕСТЕ</div>
-                    <div class="gy-zone" id="my-gy">СКАМЕЙКА<br/>(0)</div>
+                    @* My subs and deck *@
+                    <div style="display: flex; flex-direction: column; gap: 1vh;">
+                        <div class="deck-zone">ТЕСТЕ</div>
+                        <div class="gy-zone" id="my-gy">СКАМЕЙКА<br />(0)</div>
+                    </div>
                 </div>
             </div>
-            
-            <h3 style="margin-top: 1vh;">@Model.Game.Player1.Name - Жизнени точки: <span id="my-lp" style="color: #44ff44;">30</span></h3>
-        </div>
 
-        @* My hand *@
-        <div class="my-hand-wrapper">
-            <div class="card-row my-hand" id="my-hand-container"></div>
-        </div>
+            @* My hand (ВИНАГИ ВИДИМА) *@
+            <div class="my-hand-wrapper">
+                <div class="card-row my-hand" id="my-hand-container"></div>
+            </div>
 
-    </div>
+        </div>
 </div>
 
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
