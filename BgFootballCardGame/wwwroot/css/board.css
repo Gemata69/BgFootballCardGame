@@ -448,3 +448,49 @@
     color: white;
     box-shadow: 0 4px 10px rgba(255, 0, 255, 0.4);
 }
+
+.board-audio-controls {
+    margin-top: 3vh;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    padding-top: 2vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.board-audio-label {
+    font-size: 1.2vh;
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.board-audio-btn {
+    background: none;
+    border: none;
+    color: #ffd700;
+    font-size: 3vh;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+    .board-audio-btn:hover {
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 10px #ffd700);
+    }
+
+.board-volume-slider {
+    width: 50%;
+    cursor: pointer;
+    accent-color: #ffd700;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+    .board-volume-slider:hover {
+        opacity: 1;
+    }

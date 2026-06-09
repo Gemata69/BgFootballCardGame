@@ -559,6 +559,58 @@ document.querySelectorAll(".my-board-slot").forEach(slot => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const boardMusic = document.getElementById("board-bg-music");
+    const boardBtnMute = document.getElementById("board-btn-mute");
+    const boardVolumeSlider = document.getElementById("board-volume-slider");
+
+    let isBoardMuted = false;
+    let currentBoardVolume = 0.2; 
+
+    if (boardBtnMute && boardVolumeSlider) {
+        boardVolumeSlider.addEventListener("input", function () {
+            currentBoardVolume = parseFloat(this.value);
+
+            if (boardMusic && !isBoardMuted) {
+                boardMusic.volume = currentBoardVolume;
+            }
+
+            if (currentBoardVolume === 0) {
+                isBoardMuted = true;
+                boardBtnMute.innerHTML = "🔇";
+            } else {
+                isBoardMuted = false;
+                boardBtnMute.innerHTML = "🔊";
+            }
+        });
+
+        boardBtnMute.addEventListener("click", function () {
+            isBoardMuted = !isBoardMuted;
+
+            if (isBoardMuted) {
+                if (boardMusic) boardMusic.volume = 0;
+                boardBtnMute.innerHTML = "🔇";
+                boardVolumeSlider.value = 0;
+            } else {
+                if (currentBoardVolume === 0) currentBoardVolume = 0.2;
+                if (boardMusic) boardMusic.volume = currentBoardVolume;
+                boardBtnMute.innerHTML = "🔊";
+                boardVolumeSlider.value = currentBoardVolume;
+            }
+        });
+    }
+
+    function startBoardMusic() {
+        if (boardMusic && !isBoardMuted) {
+            boardMusic.volume = currentBoardVolume;
+            boardMusic.play().catch(e => console.log("Музиката изчаква потребителско действие:", e));
+        }
+        document.removeEventListener("click", startBoardMusic);
+    }
+
+    document.addEventListener("click", startBoardMusic);
+});
+
 document.getElementById("btn-draw-footballer").addEventListener("click", function () {
     document.getElementById("spell-search-modal").style.display = "none";
     addNewCardToHand({ name: "Изтеглен Скаут", type: "Footballer", atk: 90, def: 85, con: 80 });
