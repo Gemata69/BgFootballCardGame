@@ -15,21 +15,21 @@ connection.on("ReceiveCardPlayed", function (playerName, handIndex, boardIndex, 
     }
 });
 const playerDatabase = [
-    { name: "Mustafa Sangare", team: "Левски", imgUrl: "/images/Mustafa Sangare.png", baseAtk: 88, baseDef: 35, baseCon: 72 },
+    { name: "Mustafa Sangare", team: "Левски", imgUrl: "/images/Sangare.png", baseAtk: 88, baseDef: 35, baseCon: 72 },
     { name: "Everton Bala", team: "Левски", imgUrl: "/images/EvertonBala.png", baseAtk: 84, baseDef: 45, baseCon: 78 },
     { name: "Akram Bouras", team: "Левски", imgUrl: "/images/AkramBouras.png", baseAtk: 76, baseDef: 68, baseCon: 82 },
-    { name: "Armstrong Oko-Flex", team: "Левски", imgUrl: "/images/OkoFlex.png", baseAtk: 85, baseDef: 40, baseCon: 79 },
+    { name: "Armstrong Oko-Flex", team: "Левски", imgUrl: "/images/okoflex.png", baseAtk: 85, baseDef: 40, baseCon: 79 },
     { name: "Radoslav Kirilov", team: "Левски", imgUrl: "/images/кирилов.png", baseAtk: 83, baseDef: 45, baseCon: 80 },
-    { name: "Georgi Kostadinov", team: "Левски", imgUrl: "/images/Kostadinov.png", baseAtk: 65, baseDef: 82, baseCon: 85 },
+    { name: "Georgi Kostadinov", team: "Левски", imgUrl: "/images/georgikostadinov.png", baseAtk: 65, baseDef: 82, baseCon: 85 },
     { name: "Mazire Soula", team: "Левски", imgUrl: "/images/MazireSoula.png", baseAtk: 80, baseDef: 60, baseCon: 86 },
     { name: "Cristian Makoun", team: "Левски", imgUrl: "/images/KristianMakoun.png", baseAtk: 55, baseDef: 84, baseCon: 74 },
-    { name: "Aldair", team: "Левски", imgUrl: "/images/Aldair.png", baseAtk: 68, baseDef: 81, baseCon: 76 },
+    { name: "Aldair", team: "Левски", imgUrl: "/images/aldair.png", baseAtk: 68, baseDef: 81, baseCon: 76 },
     { name: "Oliver Kamdem", team: "Левски", imgUrl: "/images/Kamdem.png", baseAtk: 65, baseDef: 80, baseCon: 75 },
     { name: "Maicon", team: "Левски", imgUrl: "/images/Maicon.png", baseAtk: 72, baseDef: 80, baseCon: 75 },
     { name: "Kristiyan Dimitrov", team: "Левски", imgUrl: "/images/Kristiyan Dimitrov.png", baseAtk: 62, baseDef: 83, baseCon: 68 },
     { name: "Juan Perea", team: "Левски", imgUrl: "/images/Perea.png", baseAtk: 86, baseDef: 38, baseCon: 70 },
     { name: "Nikola Serafimov", team: "Левски", imgUrl: "/images/Serafimov.png", baseAtk: 50, baseDef: 85, baseCon: 65 },
-    { name: "Svetoslav Vutsov", team: "Левски", imgUrl: "/images/Vutsov.png", baseAtk: 15, baseDef: 89, baseCon: 60 }
+    { name: "Svetoslav Vutsov", team: "Левски", imgUrl: "/images/svetoslavvutsov.png", baseAtk: 15, baseDef: 89, baseCon: 60 }
 ];
 
 // 40 cards in one deck
@@ -42,22 +42,21 @@ function createDeck() {
         deck.push({
             name: randomPlayer.name,
             type: "Footballer",
-            atk: randomPlayer.baseAtk + Math.floor(Math.random() * 5),
-            def: randomPlayer.baseDef + Math.floor(Math.random() * 5),
-            con: randomPlayer.baseCon + Math.floor(Math.random() * 5),
+            atk: randomPlayer.baseAtk,
+            def: randomPlayer.baseDef,
+            con: randomPlayer.baseCon,
             imgUrl: randomPlayer.imgUrl
         });
     }
 
-    for (let i = 0; i < 2; i++) deck.push({ name: "Стратегия: +2 Карти", type: "Spell", effect: "Draw2" }); 
-    for (let i = 0; i < 2; i++) deck.push({ name: "Скаутски Доклад", type: "Spell", effect: "Search" }); 
-    for (let i = 0; i < 3; i++) deck.push({ name: "Мотивация", type: "Spell", effect: "+5 Точки" }); 
+    for (let i = 0; i < 2; i++) deck.push({ name: "Penalty", type: "Spell", effect: "Draw2", desc: "Активирай тази карта, за да изтеглиш 2 допълнителни карти от тестето си.", img: "/images/+2.png" });
+    for (let i = 0; i < 2; i++) deck.push({ name: "Scout", type: "Spell", effect: "Search", desc: "Изтегли на случаен принцип 1 Футболист, Магия или Капан от тестето и го добави в ръката си.", img: "/images/search.png" });
+    for (let i = 0; i < 3; i++) deck.push({ name: "Assist", type: "Spell", effect: "+5 Точки", desc: "Избери 1 твой Футболист на терена. Той получава +5 Точки към атаката си.", img: "/images/+5.png" });
 
-    for (let i = 0; i < 2; i++) deck.push({ name: "Отрицание на Атака", type: "Trap", effect: "NegateAttack" });
-    for (let i = 0; i < 4; i++) deck.push({ name: "Засада", type: "Trap", effect: "-5 Точки" }); // ТУК ПРОМЕНИ 5 на 4
-    deck.push({ name: "Автогол", type: "Trap", effect: "Автогол" });
+    for (let i = 0; i < 2; i++) deck.push({ name: "Tackle", type: "Trap", effect: "NegateAttack", desc: "Може да се активира дори без играч на терена. Спира вражеската атака и предпазва жизнените ти точки!", img: "/images/negate attack.png" });
+    for (let i = 0; i < 4; i++) deck.push({ name: "Offside", type: "Trap", effect: "-5 Точки", desc: "Активирай по време на атака. Намалява силата на вражеския Футболист с -5 Точки.", img: "/images/-5.png" });
+    deck.push({ name: "Owngoal", type: "Trap", effect: "Автогол", desc: "Изисква твой Футболист на терена. Обръща вражеската атака и противникът понася всички щети!", img: "/images/autogoal.png" });
 
-    // Sort deck
     return deck.sort(() => Math.random() - 0.5);
 }
 
@@ -93,7 +92,7 @@ drawInitialHands();
 
 // -- STATE VARIABLES --
 let currentRound = 1;
-let timeLeft = 15;
+let timeLeft = 30;
 let countdown;
 let selectedCardElement = null;
 let selectedCardIndex = null;
@@ -168,7 +167,7 @@ document.getElementById("dice-overlay").addEventListener("click", function () {
 
 // -- ROUND & TIMER FLOW --
 function startRoundFlow() {
-    timeLeft = 15;
+    timeLeft = 30;
     document.getElementById("round-title").innerText = "РУНД " + currentRound;
     document.getElementById("my-hand-container").style.pointerEvents = "auto";
 
@@ -259,9 +258,9 @@ function executeBattlePhase(userActivatedTrap) {
 
         enemyCardData = {
             name: randomEnemy.name,
-            atk: randomEnemy.baseAtk + Math.floor(Math.random() * 5),
-            def: randomEnemy.baseDef + Math.floor(Math.random() * 5),
-            con: randomEnemy.baseCon + Math.floor(Math.random() * 5),
+            atk: randomEnemy.baseAtk,
+            def: randomEnemy.baseDef,
+            con: randomEnemy.baseCon,
             imgUrl: randomEnemy.imgUrl || "/images/Maicon.png"
         };
 
@@ -479,32 +478,54 @@ function addNewCardToHand(cardObj) {
             </div>`;
     } else {
         let typeTag = cardObj.type === "Spell" ? "[Spell Card]" : "[Trap Card]";
+
+        let gradient = cardObj.type === "Spell"
+            ? "radial-gradient(circle, #20B2AA, #006666)"
+            : "radial-gradient(circle, #C71585, #660066)";
+
         let currentEmoji = cardObj.type === "Spell" ? "✨" : (cardObj.name === "Засада" ? "🚩" : "🛑");
-        let gradient = cardObj.type === "Spell" ? "radial-gradient(circle, #777, #222)" : "radial-gradient(circle, #555, #111)";
+
+        let visualContent = cardObj.img
+            ? `<img src="${cardObj.img}" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${cardObj.name}" />`
+            : `<div style="font-size: 5vh; display: flex; align-items: center; justify-content: center; height: 100%;">${currentEmoji}</div>`;
 
         innerContent = `
-            <div class="card-title">${cardObj.name}</div>
-            <div class="card-image-wrapper" style="background: ${gradient};">
-                <div style="font-size: 5vh;">${currentEmoji}</div>
+            <div class="card-title" style="position: relative; z-index: 10; font-weight: bold; color: white; text-align: center; background: rgba(255,255,255,0.15); padding: 2px 0;">${cardObj.name}</div>
+            <div class="card-image-wrapper" style="background: ${gradient}; overflow: hidden; height: 12vh; width: 100%; display: flex; justify-content: center; align-items: center; padding: 0;">
+                ${visualContent}
             </div>
-            <div class="card-textbox" style="justify-content: flex-start;">
-                <div class="card-description" style="margin-bottom: 2px; border-bottom: 1px solid #ccc; padding-bottom: 2px;"><b>${typeTag}</b></div>
-                <div class="card-description">${cardObj.effect}</div>
+            <div class="card-textbox" style="justify-content: flex-start; padding: 2px;">
+                <div class="card-description" style="margin-bottom: 1px; border-bottom: 1px solid #ccc; padding-bottom: 1px; font-size: 0.85vh;"><b>${typeTag}</b></div>
+                <div class="card-description" style="font-size: 0.75vh; line-height: 1; letter-spacing: -0.2px; text-align: left; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical;">${cardObj.desc}</div>
             </div>`;
     }
 
     newCard.innerHTML = `<div class="card-content">${innerContent}</div>`;
     handContainer.appendChild(newCard);
+
+    newCard.addEventListener("mouseenter", function () {
+        showPreview(this.innerHTML, this.style.cssText, this.className);
+    });
+
+    newCard.addEventListener("mouseleave", function () {
+        hidePreview();
+    });
+
     reloadHandClickEvents();
 }
+
 
 function clearHighlights() {
     document.querySelectorAll(".my-board-slot").forEach(slot => slot.classList.remove("glow-slot"));
 }
 
 function reloadHandClickEvents() {
+    // ВНИМАНИЕ: Ако картите не се селектират правилно, смени ".my-hand" на "#my-hand-container"
     document.querySelectorAll(".my-hand .card-slot").forEach((card) => card.replaceWith(card.cloneNode(true)));
+
     document.querySelectorAll(".my-hand .card-slot").forEach((card, index) => {
+
+        // 1. СЪБИТИЕ ЗА КЛИКВАНЕ (Твоето оригинално)
         card.addEventListener("click", function () {
             if (!isGameStarted || timeLeft <= 0) return;
 
@@ -518,6 +539,15 @@ function reloadHandClickEvents() {
             document.querySelectorAll("#" + targetRowId + " .my-board-slot:not(.card-filled)").forEach(slot => {
                 slot.classList.add("glow-slot");
             });
+        });
+
+        // 2. СЪБИТИЯ ЗА ПОКАЗВАНЕ НА ГОЛЯМАТА КАРТА (Добавени тук!)
+        card.addEventListener("mouseenter", function () {
+            showPreview(this.innerHTML, this.style.cssText, this.className);
+        });
+
+        card.addEventListener("mouseleave", function () {
+            hidePreview();
         });
     });
 }
@@ -565,7 +595,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const boardVolumeSlider = document.getElementById("board-volume-slider");
 
     let isBoardMuted = false;
-    let currentBoardVolume = 0.2; 
+    let currentBoardVolume = 0.2;
 
     if (boardBtnMute && boardVolumeSlider) {
         boardVolumeSlider.addEventListener("input", function () {
@@ -609,18 +639,84 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     document.addEventListener("click", startBoardMusic);
-});
+}); 
+
 
 document.getElementById("btn-draw-footballer").addEventListener("click", function () {
     document.getElementById("spell-search-modal").style.display = "none";
-    addNewCardToHand({ name: "Изтеглен Скаут", type: "Footballer", atk: 90, def: 85, con: 80 });
-    alert("Изтеглихте Футболист! Тестето беше размесено! 🔄");
+
+    let randomPlayer = playerDatabase[Math.floor(Math.random() * playerDatabase.length)];
+    addNewCardToHand({
+        name: randomPlayer.name,
+        type: "Footballer",
+        atk: randomPlayer.baseAtk,
+        def: randomPlayer.baseDef,
+        con: randomPlayer.baseCon,
+        imgUrl: randomPlayer.imgUrl
+    });
+
+    alert("Изтеглихте Футболист (" + randomPlayer.name + ")! Тестето беше размесено! 🔄");
 });
 
 document.getElementById("btn-draw-trap").addEventListener("click", function () {
     document.getElementById("spell-search-modal").style.display = "none";
-    addNewCardToHand({ name: "Изтеглен Капан", type: "Trap", effect: "NegateAttack" });
-    alert("Изтеглихте Капан! Тестето беше размесено! 🔄");
+
+    let trapCards = [
+        { name: "Tackle", type: "Trap", effect: "NegateAttack", desc: "Може да се активира дори без играч на терена. Спира вражеската атака и предпазва жизнените ти точки!", img: "/images/negate attack.png" },
+        { name: "Offside", type: "Trap", effect: "-5 Точки", desc: "Активирай по време на атака. Намалява силата на вражеския Футболист с -5 Точки.", img: "/images/-5.png" },
+        { name: "Owngoal", type: "Trap", effect: "Автогол", desc: "Изисква твой Футболист на терена. Обръща вражеската атака и противникът понася всички щети!", img: "/images/autogoal.png" }
+    ];
+    let randomTrap = trapCards[Math.floor(Math.random() * trapCards.length)];
+
+    addNewCardToHand(randomTrap);
+    alert("Изтеглихте Капан (" + randomTrap.name + ")! Тестето беше размесено! 🔄");
 });
+
+
+function showPreview(cardHTML, cardStyle, cardClasses) {
+    const previewPanel = document.getElementById("card-preview-panel");
+    if (!previewPanel) return;
+
+    previewPanel.innerHTML = cardHTML;
+    previewPanel.className = cardClasses;
+    previewPanel.style.cssText = cardStyle;
+
+    previewPanel.style.width = "100%";
+    previewPanel.style.height = "100%";
+    previewPanel.style.margin = "0";
+    previewPanel.style.transform = "none";
+    previewPanel.style.display = "block";
+
+    const textElements = previewPanel.querySelectorAll('.card-description');
+    textElements.forEach(el => {
+        el.style.fontSize = "14px";
+        el.style.lineHeight = "1.2";
+        el.style.webkitLineClamp = "unset";
+    });
+
+    const titleElement = previewPanel.querySelector('.card-title');
+    if (titleElement) titleElement.style.fontSize = "18px";
+
+    const imageWrapper = previewPanel.querySelector('.card-image-wrapper');
+    if (imageWrapper) {
+        imageWrapper.style.height = "160px"; 
+        imageWrapper.style.maxHeight = "none";
+        imageWrapper.style.padding = "0";
+    }
+
+    const image = previewPanel.querySelector('img');
+    if (image) {
+        image.style.width = "100%";
+        image.style.height = "100%";
+        image.style.objectFit = "cover"; 
+        image.style.aspectRatio = "unset";
+        image.style.display = "block";
+    }
+}
+
+function hidePreview() {
+    const previewPanel = document.getElementById("card-preview-panel");
+    if (previewPanel) previewPanel.style.display = "none";
+}
 
 reloadHandClickEvents();

@@ -76,18 +76,18 @@
 
                 const btnMute = document.getElementById("btn-mute");
                 const volumeSlider = document.getElementById("volume-slider");
-        
+
                 let isMuted = false;
-                let currentVolume = 0.3; 
+                let currentVolume = 0.3;
 
                 if (btnMute && volumeSlider) {
                     volumeSlider.addEventListener("input", function () {
                         currentVolume = parseFloat(this.value);
-                
+            
                         if (bgMusic && !isMuted) {
                             bgMusic.volume = currentVolume;
                         }
-                
+            
                         if (currentVolume === 0) {
                             isMuted = true;
                             btnMute.innerHTML = "🔇";
@@ -99,13 +99,13 @@
 
                     btnMute.addEventListener("click", function () {
                         isMuted = !isMuted;
-                
+            
                         if (isMuted) {
                             if (bgMusic) bgMusic.volume = 0;
                             btnMute.innerHTML = "🔇";
                             volumeSlider.value = 0;
                         } else {
-                            if (currentVolume === 0) currentVolume = 0.3; 
+                            if (currentVolume === 0) currentVolume = 0.3;
                             if (bgMusic) bgMusic.volume = currentVolume;
                             btnMute.innerHTML = "🔊";
                             volumeSlider.value = currentVolume;
@@ -115,7 +115,6 @@
 
                 if (startOverlay) {
                     startOverlay.addEventListener("click", function () {
-
                         if (glassSound) {
                             glassSound.volume = 0;
                             glassSound.play().then(() => {
@@ -130,7 +129,7 @@
                             bgMusic.play().then(() => {
                                 bgMusic.pause();
                                 bgMusic.currentTime = 0;
-                                bgMusic.volume = currentVolume; 
+                                bgMusic.volume = currentVolume;
                             }).catch(e => console.log(e));
                         }
 
@@ -144,7 +143,7 @@
                             ball.style.display = "none";
 
                             if (glassSound) {
-                                glassSound.play().catch(e => console.log("Браузърът блокира звука:", e));
+                                glassSound.play().catch(e => console.log(e));
                             }
                         }, 2000);
 
@@ -154,7 +153,7 @@
 
                         setTimeout(() => {
                             if (bgMusic && !isMuted) {
-                                bgMusic.play().catch(e => console.log("Браузърът блокира музиката:", e));
+                                bgMusic.play().catch(e => console.log(e));
                             }
                         }, 4000);
 
@@ -166,58 +165,81 @@
                     });
                 }
 
-                // CARD SHOWCASE GENERATOR
                 const sampleCards = [
-                    { type: "Footballer", name: "Mustafa Sangare", img: "/images/Sangare.png", atk: 88, def: 35, con: 72 },
-                    { type: "Footballer", name: "Maicon", img: "/images/Maicon.png", atk: 72, def: 80, con: 75 },
-                    { type: "Spell", name: "Стратегия: +2", effect: "Теглиш 2 допълнителни карти.", emoji: "🪄" },
-                    { type: "Trap", name: "Отрицание", effect: "Спира атаката на противника!", emoji: "🛑" },
-                    { type: "Footballer", name: "Radoslav Kirilov", img: "/images/Kirilov.png", atk: 83, def: 45, con: 80 },
-                    { type: "Footballer", name: "Svetoslav Vutsov", img: "/images/Vutsov.png", atk: 15, def: 89, con: 60 },
-                    { type: "Spell", name: "Скаутски Доклад", effect: "Търсиш специфичен играч в тестето.", emoji: "🔍" },
-                    { type: "Trap", name: "Засада", effect: "Нанася -5 Точки щета на врага.", emoji: "🚩" }
-                ];
+    { type: "Footballer", name: "Mustafa Sangare", img: "/images/Sangare.png", atk: 88, def: 35, con: 72 },
+    { type: "Spell", name: "Penalty", desc: "Активирай тази карта, за да изтеглиш 2 допълнителни карти от тестето си.", img: "/images/+2.png" },
+    { type: "Footballer", name: "Everton Bala", img: "/images/EvertonBala.png", atk: 84, def: 45, con: 78 },
+    { type: "Trap", name: "Tackle", desc: "Може да се активира дори без играч на терена. Спира вражеската атака и предпазва жизнените ти точки!", img: "/images/negate attack.png" },
+    { type: "Footballer", name: "Akram Bouras", img: "/images/ab47.png", atk: 76, def: 68, con: 82 },
+    { type: "Footballer", name: "Armstrong Oko-Flex", img: "/images/okoflex.png", atk: 85, def: 40, con: 79 },
+    { type: "Spell", name: "Scout", desc: "Изтегли на случаен принцип 1 Футболист, Магия или Капан от тестето и го добави в ръката си.", img: "/images/search.png" },
+    { type: "Footballer", name: "Radoslav Kirilov", img: "/images/кирилов.png", atk: 83, def: 45, con: 80 },
+    { type: "Footballer", name: "Georgi Kostadinov", img: "/images/georgikostadinov.png", atk: 65, def: 82, con: 85 },
+    { type: "Trap", name: "Offside", desc: "Активирай по време на атака. Намалява силата на вражеския Футболист с -5 Точки.", img: "/images/-5.png" },
+    { type: "Footballer", name: "Mazire Soula", img: "/images/MazireSoula.png", atk: 80, def: 60, con: 86 },
+    { type: "Footballer", name: "Cristian Makoun", img: "/images/KristianMakoun.png", atk: 55, def: 84, con: 74 },
+    { type: "Spell", name: "Assist", desc: "Избери 1 твой Футболист на терена. Той получава +5 Точки към атаката си.", img: "/images/+5.png" },
+    { type: "Footballer", name: "Aldair", img: "/images/aldair.png", atk: 68, def: 81, con: 76 },
+    { type: "Footballer", name: "Oliver Kamdem", img: "/images/kamdem.png", atk: 65, def: 80, con: 75 },
+    { type: "Trap", name: "Owngoal", desc: "Изисква твой Футболист на терена. Обръща вражеската атака и противникът понася всички щети!", img: "/images/autogoal.png" },
+    { type: "Footballer", name: "Maicon", img: "/images/Maicon.png", atk: 72, def: 80, con: 75 },
+    { type: "Footballer", name: "Kristiyan Dimitrov", img: "/images/kd50.png", atk: 62, def: 83, con: 68 },
+    { type: "Footballer", name: "Gasper Trdin", img: "/images/trdin.png", atk: 86, def: 38, con: 70 },
+    { type: "Footballer", name: "Asen Mitkov", img: "/images/am10.png", atk: 70, def: 75, con: 85 },
+    { type: "Footballer", name: "Svetoslav Vutsov", img: "/images/svetoslavvutsov.png", atk: 15, def: 89, con: 60 }
+];
 
-                function generateCardHTML(card) {
-                    if (card.type === "Footballer") {
-                        let imgPath = card.img || "/images/Maicon.png";
-                        return `
-                            <div class="card-slot card-footballer">
-                                <div class="card-content">
-                                    <div class="card-title">${card.name}</div>
-                                    <div class="card-image-wrapper">
-                                        <img src="${imgPath}" class="card-image" onerror="this.src='/images/Maicon.png'" alt="Player" />
-                                    </div>
-                                    <div class="card-textbox">
-                                        <div class="card-description"><b>[Footballer / Effect]</b><br/>Основен играч.</div>
-                                        <div class="card-stats">
-                                            <span><span class="stat-label">ATK/</span>${card.atk}</span>
-                                            <span><span class="stat-label">DEF/</span>${card.def}</span>
-                                            <span><span class="stat-label">CON/</span>${card.con}</span>
+                             function generateCardHTML(card) {
+                        if (card.type === "Footballer") {
+                            let imgPath = card.img || "/images/Maicon.png";
+                            return `
+                                <div class="card-slot card-footballer">
+                                    <div class="card-content">
+                                        <div class="card-title" style="position: relative; z-index: 10; font-weight: bold; text-align: center; background: rgba(255,255,255,0.15); padding: 2px 0; color: black;">${card.name}</div>
+                                        <div class="card-image-wrapper" style="overflow: hidden; height: 12vh; width: 100%; background: radial-gradient(circle, #eee, #aaa); padding: 0;">
+                                            <img src="${imgPath}" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${card.name}" />
+                                        </div>
+                                        <div class="card-textbox" style="padding: 2px;">
+                                            <div class="card-description" style="margin-bottom: 2px; border-bottom: 1px solid #555; padding-bottom: 1px; font-size: 0.9vh;"><b>[Footballer / Effect]</b></div>
+                                            <div class="card-stats" style="font-size: 1vh; margin-top: 2px;">
+                                                <span><span class="stat-label">ATK/</span>${card.atk}</span>
+                                                <span><span class="stat-label">DEF/</span>${card.def}</span>
+                                                <span><span class="stat-label">CON/</span>${card.con}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>`;
-                    } else {
-                        let cssClass = card.type === "Spell" ? "card-spell" : "card-trap";
-                        let typeTag = card.type === "Spell" ? "[Spell Card]" : "[Trap Card]";
-                        let currentEmoji = card.emoji || (card.type === "Spell" ? "✨" : "⚠️");
+                                </div>`;
+                        } else {
+                            let cssClass = card.type === "Spell" ? "card-spell" : "card-trap";
+                            let typeTag = card.type === "Spell" ? "[Spell Card]" : "[Trap Card]";
+                
+                            let cardOuterStyle = card.type === "Spell"
+                                ? "background: linear-gradient(135deg, #0f5132, #042914); border: 2px solid #20B2AA;"
+                                : "background: linear-gradient(135deg, #4a148c, #12005e); border: 2px solid #C71585;";
 
-                        return `
-                            <div class="card-slot ${cssClass}">
-                                <div class="card-content">
-                                    <div class="card-title">${card.name}</div>
-                                    <div class="card-image-wrapper" style="background: radial-gradient(circle, #777, #222);">
-                                        <div style="font-size: 6vh;">${currentEmoji}</div>
+                            let wrapperBg = card.type === "Spell"
+                                ? "radial-gradient(circle, #20B2AA, #006666)"
+                                : "radial-gradient(circle, #C71585, #660066)";
+                
+                            let visualContent = card.img
+                                ? `<img src="${card.img}" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${card.name}" />`
+                                : `<div style="font-size: 6vh; display: flex; align-items: center; justify-content: center; height: 100%; color: white;">${card.emoji || (card.type === "Spell" ? "✨" : "⚠️")}</div>`;
+
+                            return `
+                                <div class="card-slot ${cssClass}" style="${cardOuterStyle}">
+                                    <div class="card-content">
+                                        <div class="card-title" style="position: relative; z-index: 10; font-weight: bold; color: white; text-align: center; background: rgba(255,255,255,0.15); padding: 2px 0;">${card.name}</div>
+                                        <div class="card-image-wrapper" style="background: ${wrapperBg}; height: 12vh; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 0;">
+                                            ${visualContent}
+                                        </div>
+                                        <div class="card-textbox" style="justify-content: flex-start; color: white; padding: 2px;">
+                                            <div class="card-description" style="margin-bottom: 1px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 1px; font-size: 0.85vh;"><b>${typeTag}</b></div>
+                                            <div class="card-description" style="font-size: 0.75vh; line-height: 1; letter-spacing: -0.2px; text-align: left; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical;">${card.desc}</div>
+                                        </div>
                                     </div>
-                                    <div class="card-textbox" style="justify-content: flex-start;">
-                                        <div class="card-description" style="margin-bottom: 4px; border-bottom: 1px solid #ccc; padding-bottom: 2px;"><b>${typeTag}</b></div>
-                                        <div class="card-description">${card.effect}</div>
-                                    </div>
-                                </div>
-                            </div>`;
+                                </div>`;
+                        }
                     }
-                }
 
                 let cardsHTML = sampleCards.map(generateCardHTML).join("");
                 let endlessHTML = cardsHTML + cardsHTML + cardsHTML + cardsHTML;
