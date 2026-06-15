@@ -4,6 +4,7 @@
     ViewData["Title"] = "Home - BG Football Card Game";
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,28 +17,20 @@
     <div id="start-game-overlay">
         <span>Click to start</span>
     </div>
-
+    
     <div id="intro-screen">
         <div class="player-realistic"></div>
         <div class="football" id="anim-ball"></div>
         <div class="ready-text" id="anim-text">Are you ready?</div>
-        
+
         <audio id="glass-sound" src="https://assets.mixkit.co/active_storage/sfx/204/204-preview.mp3" preload="auto"></audio>
-        
         <audio id="bg-music" src="/audio/Chantlight Stadium.mp3" preload="auto" loop></audio>
     </div>
-
-    <div id="main-menu">
         
+    <div id="main-menu">
         <div class="showcase-container">
             <div class="marquee-row scroll-right" id="row-top"></div>
             <div class="marquee-row scroll-left" id="row-bottom"></div>
-        </div>
-
-        <div class="lang-switcher">
-            <a href="#" class="lang-btn active">BG</a>
-            <span class="lang-separator">|</span>
-            <a href="#" class="lang-btn">EN</a>
         </div>
 
         <div class="audio-controls">
@@ -57,7 +50,7 @@
             
             <a asp-page="/Board" class="btn-menu">Start Game</a>
             <a href="#" class="btn-menu">Multiplayer</a>
-            <a href="#" class="btn-menu">Deck</a>
+            <a asp-page="/DeckBuilder" class="btn-menu">Deck</a>
             <a href="#" class="btn-menu">Store</a>
             <a href="#" class="btn-menu">Settings</a>
             <a href="#" class="btn-menu">Leave Game</a>
@@ -80,14 +73,85 @@
                 let isMuted = false;
                 let currentVolume = 0.3;
 
+            if (sessionStorage.getItem("introPlayed") === "true") {
+                if (startOverlay) startOverlay.style.display = "none";
+                if (introScreen) introScreen.style.display = "none";
+                if (mainMenu) mainMenu.style.opacity = "1";
+
+                if (bgMusic && !isMuted) {
+                    bgMusic.volume = currentVolume;
+                    bgMusic.play().catch(e => {
+                        console.log("Браузърът изисква интеракция (клик), за да пусне аудиото.");
+                        document.addEventListener("click", function startMusicOnInteraction() {
+                            if (!isMuted) bgMusic.play();
+                            document.removeEventListener("click", startMusicOnInteraction);
+                        }, { once: true });
+                    });
+                }
+            } else {
+                    sessionStorage.setItem("introPlayed", "true");
+
+                    if (startOverlay) {
+                        startOverlay.addEventListener("click", function () {
+                            if (glassSound) {
+                                glassSound.volume = 0;
+                                glassSound.play().then(() => {
+                                    glassSound.pause();
+                                    glassSound.currentTime = 0;
+                                    glassSound.volume = 1.0;
+                                }).catch(e => console.log(e));
+                            }
+
+                            if (bgMusic) {
+                                bgMusic.volume = 0;
+                                bgMusic.play().then(() => {
+                                    bgMusic.pause();
+                                    bgMusic.currentTime = 0;
+                                    bgMusic.volume = currentVolume;
+                                }).catch(e => console.log(e));
+                            }
+
+                            startOverlay.style.display = "none";
+
+                            setTimeout(() => { ball.classList.add("kick-ball"); }, 600);
+
+                            setTimeout(() => {
+                                introScreen.classList.add("cracked");
+                                introScreen.style.animation = "screenBreak 0.5s ease-out forwards";
+                                ball.style.display = "none";
+
+                                if (glassSound) {
+                                    glassSound.play().catch(e => console.log(e));
+                                }
+                            }, 2000);
+
+                            setTimeout(() => {
+                                text.classList.add("show-text");
+                            }, 2400);
+
+                            setTimeout(() => {
+                                if (bgMusic && !isMuted) {
+                                    bgMusic.play().catch(e => console.log(e));
+                                }
+                            }, 4000);
+
+                            setTimeout(() => {
+                                introScreen.style.opacity = "0";
+                                mainMenu.style.opacity = "1";
+                                setTimeout(() => { introScreen.style.display = "none"; }, 1000);
+                            }, 5000);
+                        });
+                    }
+                }
+
                 if (btnMute && volumeSlider) {
                     volumeSlider.addEventListener("input", function () {
                         currentVolume = parseFloat(this.value);
-            
+        
                         if (bgMusic && !isMuted) {
                             bgMusic.volume = currentVolume;
                         }
-            
+        
                         if (currentVolume === 0) {
                             isMuted = true;
                             btnMute.innerHTML = "🔇";
@@ -99,7 +163,7 @@
 
                     btnMute.addEventListener("click", function () {
                         isMuted = !isMuted;
-            
+        
                         if (isMuted) {
                             if (bgMusic) bgMusic.volume = 0;
                             btnMute.innerHTML = "🔇";
@@ -113,144 +177,94 @@
                     });
                 }
 
-                if (startOverlay) {
-                    startOverlay.addEventListener("click", function () {
-                        if (glassSound) {
-                            glassSound.volume = 0;
-                            glassSound.play().then(() => {
-                                glassSound.pause();
-                                glassSound.currentTime = 0;
-                                glassSound.volume = 1.0;
-                            }).catch(e => console.log(e));
-                        }
-
-                        if (bgMusic) {
-                            bgMusic.volume = 0;
-                            bgMusic.play().then(() => {
-                                bgMusic.pause();
-                                bgMusic.currentTime = 0;
-                                bgMusic.volume = currentVolume;
-                            }).catch(e => console.log(e));
-                        }
-
-                        startOverlay.style.display = "none";
-
-                        setTimeout(() => { ball.classList.add("kick-ball"); }, 600);
-
-                        setTimeout(() => {
-                            introScreen.classList.add("cracked");
-                            introScreen.style.animation = "screenBreak 0.5s ease-out forwards";
-                            ball.style.display = "none";
-
-                            if (glassSound) {
-                                glassSound.play().catch(e => console.log(e));
-                            }
-                        }, 2000);
-
-                        setTimeout(() => {
-                            text.classList.add("show-text");
-                        }, 2400);
-
-                        setTimeout(() => {
-                            if (bgMusic && !isMuted) {
-                                bgMusic.play().catch(e => console.log(e));
-                            }
-                        }, 4000);
-
-                        setTimeout(() => {
-                            introScreen.style.opacity = "0";
-                            mainMenu.style.opacity = "1";
-                            setTimeout(() => { introScreen.style.display = "none"; }, 1000);
-                        }, 5000);
-                    });
-                }
-
                 const sampleCards = [
-    { type: "Footballer", name: "Mustafa Sangare", img: "/images/Sangare.png", atk: 88, def: 35, con: 72 },
-    { type: "Spell", name: "Penalty", desc: "Активирай тази карта, за да изтеглиш 2 допълнителни карти от тестето си.", img: "/images/+2.png" },
-    { type: "Footballer", name: "Everton Bala", img: "/images/EvertonBala.png", atk: 84, def: 45, con: 78 },
-    { type: "Trap", name: "Tackle", desc: "Може да се активира дори без играч на терена. Спира вражеската атака и предпазва жизнените ти точки!", img: "/images/negate attack.png" },
-    { type: "Footballer", name: "Akram Bouras", img: "/images/ab47.png", atk: 76, def: 68, con: 82 },
-    { type: "Footballer", name: "Armstrong Oko-Flex", img: "/images/okoflex.png", atk: 85, def: 40, con: 79 },
-    { type: "Spell", name: "Scout", desc: "Изтегли на случаен принцип 1 Футболист, Магия или Капан от тестето и го добави в ръката си.", img: "/images/search.png" },
-    { type: "Footballer", name: "Radoslav Kirilov", img: "/images/кирилов.png", atk: 83, def: 45, con: 80 },
-    { type: "Footballer", name: "Georgi Kostadinov", img: "/images/georgikostadinov.png", atk: 65, def: 82, con: 85 },
-    { type: "Trap", name: "Offside", desc: "Активирай по време на атака. Намалява силата на вражеския Футболист с -5 Точки.", img: "/images/-5.png" },
-    { type: "Footballer", name: "Mazire Soula", img: "/images/MazireSoula.png", atk: 80, def: 60, con: 86 },
-    { type: "Footballer", name: "Cristian Makoun", img: "/images/KristianMakoun.png", atk: 55, def: 84, con: 74 },
-    { type: "Spell", name: "Assist", desc: "Избери 1 твой Футболист на терена. Той получава +5 Точки към атаката си.", img: "/images/+5.png" },
-    { type: "Footballer", name: "Aldair", img: "/images/aldair.png", atk: 68, def: 81, con: 76 },
-    { type: "Footballer", name: "Oliver Kamdem", img: "/images/kamdem.png", atk: 65, def: 80, con: 75 },
-    { type: "Trap", name: "Owngoal", desc: "Изисква твой Футболист на терена. Обръща вражеската атака и противникът понася всички щети!", img: "/images/autogoal.png" },
-    { type: "Footballer", name: "Maicon", img: "/images/Maicon.png", atk: 72, def: 80, con: 75 },
-    { type: "Footballer", name: "Kristiyan Dimitrov", img: "/images/kd50.png", atk: 62, def: 83, con: 68 },
-    { type: "Footballer", name: "Gasper Trdin", img: "/images/trdin.png", atk: 86, def: 38, con: 70 },
-    { type: "Footballer", name: "Asen Mitkov", img: "/images/am10.png", atk: 70, def: 75, con: 85 },
-    { type: "Footballer", name: "Svetoslav Vutsov", img: "/images/svetoslavvutsov.png", atk: 15, def: 89, con: 60 }
-];
+                    { type: "Footballer", name: "Mustafa Sangare", img: "/images/Sangare.png", atk: 88, def: 35, con: 72 },
+                    { type: "Spell", name: "Penalty", desc: "Активирай тази карта, за да изтеглиш 2 допълнителни карти от тестето си.", img: "/images/+2.png" },
+                    { type: "Footballer", name: "Everton Bala", img: "/images/EvertonBala.png", atk: 84, def: 45, con: 78 },
+                    { type: "Trap", name: "Tackle", desc: "Може да се активира дори без играч на терена. Спира вражеската атака и предпазва жизнените ти точки!", img: "/images/negate attack.png" },
+                    { type: "Footballer", name: "Akram Bouras", img: "/images/ab47.png", atk: 76, def: 68, con: 82 },
+                    { type: "Footballer", name: "Armstrong Oko-Flex", img: "/images/okoflex.png", atk: 85, def: 40, con: 79 },
+                    { type: "Spell", name: "Scout", desc: "Изтегли на случаен принцип 1 Футболист, Магия или Капан от тестето и го добави в ръката си.", img: "/images/search.png" },
+                    { type: "Footballer", name: "Radoslav Kirilov", img: "/images/кирилов.png", atk: 83, def: 45, con: 80 },
+                    { type: "Footballer", name: "Georgi Kostadinov", img: "/images/georgikostadinov.png", atk: 65, def: 82, con: 85 },
+                    { type: "Trap", name: "Offside", desc: "Активирай по време на атака. Намалява силата на вражеския Футболист с -5 Точки.", img: "/images/-5.png" },
+                    { type: "Footballer", name: "Mazire Soula", img: "/images/MazireSoula.png", atk: 80, def: 60, con: 86 },
+                    { type: "Footballer", name: "Cristian Makoun", img: "/images/KristianMakoun.png", atk: 55, def: 84, con: 74 },
+                    { type: "Spell", name: "Assist", desc: "Избери 1 твой Футболист на терена. Той получава +5 Точки към атаката си.", img: "/images/+5.png" },
+                    { type: "Footballer", name: "Aldair", img: "/images/aldair.png", atk: 68, def: 81, con: 76 },
+                    { type: "Footballer", name: "Oliver Kamdem", img: "/images/kamdem.png", atk: 65, def: 80, con: 75 },
+                    { type: "Trap", name: "Owngoal", desc: "Изисква твой Футболист на терена. Обръща вражеската атака и противникът понася всички щети!", img: "/images/autogoal.png" },
+                    { type: "Footballer", name: "Maicon", img: "/images/Maicon.png", atk: 72, def: 80, con: 75 },
+                    { type: "Footballer", name: "Kristiyan Dimitrov", img: "/images/kd50.png", atk: 62, def: 83, con: 68 },
+                    { type: "Footballer", name: "Gasper Trdin", img: "/images/trdin.png", atk: 86, def: 38, con: 70 },
+                    { type: "Footballer", name: "Asen Mitkov", img: "/images/am10.png", atk: 70, def: 75, con: 85 },
+                    { type: "Footballer", name: "Svetoslav Vutsov", img: "/images/svetoslavvutsov.png", atk: 15, def: 89, con: 60 }
+                ];
 
-                             function generateCardHTML(card) {
-                        if (card.type === "Footballer") {
-                            let imgPath = card.img || "/images/Maicon.png";
-                            return `
-                                <div class="card-slot card-footballer">
-                                    <div class="card-content">
-                                        <div class="card-title" style="position: relative; z-index: 10; font-weight: bold; text-align: center; background: rgba(255,255,255,0.15); padding: 2px 0; color: black;">${card.name}</div>
-                                        <div class="card-image-wrapper" style="overflow: hidden; height: 12vh; width: 100%; background: radial-gradient(circle, #eee, #aaa); padding: 0;">
-                                            <img src="${imgPath}" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${card.name}" />
-                                        </div>
-                                        <div class="card-textbox" style="padding: 2px;">
-                                            <div class="card-description" style="margin-bottom: 2px; border-bottom: 1px solid #555; padding-bottom: 1px; font-size: 0.9vh;"><b>[Footballer / Effect]</b></div>
-                                            <div class="card-stats" style="font-size: 1vh; margin-top: 2px;">
-                                                <span><span class="stat-label">ATK/</span>${card.atk}</span>
-                                                <span><span class="stat-label">DEF/</span>${card.def}</span>
-                                                <span><span class="stat-label">CON/</span>${card.con}</span>
-                                            </div>
+                function generateCardHTML(card) {
+                    if (card.type === "Footballer") {
+                        let imgPath = card.img || "/images/Maicon.png";
+                        return `
+                            <div class="card-slot card-footballer">
+                                <div class="card-content">
+                                    <div class="card-title" style="position: relative; z-index: 10; font-weight: bold; text-align: center; background: rgba(255,255,255,0.15); padding: 2px 0; color: black;">${card.name}</div>
+                                    <div class="card-image-wrapper" style="overflow: hidden; height: 12vh; width: 100%; background: radial-gradient(circle, #eee, #aaa); padding: 0;">
+                                        <img src="${imgPath}" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${card.name}" />
+                                    </div>
+                                    <div class="card-textbox" style="padding: 2px;">
+                                        <div class="card-description" style="margin-bottom: 2px; border-bottom: 1px solid #555; padding-bottom: 1px; font-size: 0.9vh;"><b>[Footballer / Effect]</b></div>
+                                        <div class="card-stats" style="font-size: 1vh; margin-top: 2px;">
+                                            <span><span class="stat-label">ATK/</span>${card.atk}</span>
+                                            <span><span class="stat-label">DEF/</span>${card.def}</span>
+                                            <span><span class="stat-label">CON/</span>${card.con}</span>
                                         </div>
                                     </div>
-                                </div>`;
-                        } else {
-                            let cssClass = card.type === "Spell" ? "card-spell" : "card-trap";
-                            let typeTag = card.type === "Spell" ? "[Spell Card]" : "[Trap Card]";
-                
-                            let cardOuterStyle = card.type === "Spell"
-                                ? "background: linear-gradient(135deg, #0f5132, #042914); border: 2px solid #20B2AA;"
-                                : "background: linear-gradient(135deg, #4a148c, #12005e); border: 2px solid #C71585;";
+                                </div>
+                            </div>`;
+                    } else {
+                        let cssClass = card.type === "Spell" ? "card-spell" : "card-trap";
+                        let typeTag = card.type === "Spell" ? "[Spell Card]" : "[Trap Card]";
+        
+                        let cardOuterStyle = card.type === "Spell"
+                            ? "background: linear-gradient(135deg, #0f5132, #042914); border: 2px solid #20B2AA;"
+                            : "background: linear-gradient(135deg, #4a148c, #12005e); border: 2px solid #C71585;";
 
-                            let wrapperBg = card.type === "Spell"
-                                ? "radial-gradient(circle, #20B2AA, #006666)"
-                                : "radial-gradient(circle, #C71585, #660066)";
-                
-                            let visualContent = card.img
-                                ? `<img src="${card.img}" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${card.name}" />`
-                                : `<div style="font-size: 6vh; display: flex; align-items: center; justify-content: center; height: 100%; color: white;">${card.emoji || (card.type === "Spell" ? "✨" : "⚠️")}</div>`;
+                        let wrapperBg = card.type === "Spell"
+                            ? "radial-gradient(circle, #20B2AA, #006666)"
+                            : "radial-gradient(circle, #C71585, #660066)";
+        
+                        let visualContent = card.img
+                            ? `<img src="${card.img}" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${card.name}" />`
+                            : `<div style="font-size: 6vh; display: flex; align-items: center; justify-content: center; height: 100%; color: white;">${card.emoji || (card.type === "Spell" ? "✨" : "⚠️")}</div>`;
 
-                            return `
-                                <div class="card-slot ${cssClass}" style="${cardOuterStyle}">
-                                    <div class="card-content">
-                                        <div class="card-title" style="position: relative; z-index: 10; font-weight: bold; color: white; text-align: center; background: rgba(255,255,255,0.15); padding: 2px 0;">${card.name}</div>
-                                        <div class="card-image-wrapper" style="background: ${wrapperBg}; height: 12vh; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 0;">
-                                            ${visualContent}
-                                        </div>
-                                        <div class="card-textbox" style="justify-content: flex-start; color: white; padding: 2px;">
-                                            <div class="card-description" style="margin-bottom: 1px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 1px; font-size: 0.85vh;"><b>${typeTag}</b></div>
-                                            <div class="card-description" style="font-size: 0.75vh; line-height: 1; letter-spacing: -0.2px; text-align: left; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical;">${card.desc}</div>
-                                        </div>
+                        return `
+                            <div class="card-slot ${cssClass}" style="${cardOuterStyle}">
+                                <div class="card-content">
+                                    <div class="card-title" style="position: relative; z-index: 10; font-weight: bold; color: white; text-align: center; background: rgba(255,255,255,0.15); padding: 2px 0;">${card.name}</div>
+                                    <div class="card-image-wrapper" style="background: ${wrapperBg}; height: 12vh; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 0;">
+                                        ${visualContent}
                                     </div>
-                                </div>`;
-                        }
+                                    <div class="card-textbox" style="justify-content: flex-start; color: white; padding: 2px;">
+                                        <div class="card-description" style="margin-bottom: 1px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 1px; font-size: 0.85vh;"><b>${typeTag}</b></div>
+                                        <div class="card-description" style="font-size: 0.75vh; line-height: 1; letter-spacing: -0.2px; text-align: left; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical;">${card.desc}</div>
+                                    </div>
+                                </div>
+                            </div>`;
                     }
+                }
 
                 let cardsHTML = sampleCards.map(generateCardHTML).join("");
                 let endlessHTML = cardsHTML + cardsHTML + cardsHTML + cardsHTML;
 
-                document.getElementById("row-top").innerHTML = endlessHTML;
+                const rowTop = document.getElementById("row-top");
+                if (rowTop) rowTop.innerHTML = endlessHTML;
 
                 let reversedCardsHTML = sampleCards.slice().reverse().map(generateCardHTML).join("");
                 let endlessReversedHTML = reversedCardsHTML + reversedCardsHTML + reversedCardsHTML + reversedCardsHTML;
-                document.getElementById("row-bottom").innerHTML = endlessReversedHTML;
+            
+                const rowBottom = document.getElementById("row-bottom");
+                if (rowBottom) rowBottom.innerHTML = endlessReversedHTML;
             });
     </script>
-
 </body>
 </html>

@@ -46,7 +46,7 @@
     .board-container::before {
         content: "";
         position: absolute;
-        top: 48%; 
+        top: 52%; 
         left: -10%;
         width: 120%;
         height: 4px;
@@ -102,6 +102,8 @@
     display: flex;
 }
 
+
+
 .player-zone h3, .player-zone h4 {
     margin-top: 0.2vh !important;
     margin-bottom: 0.2vh !important;
@@ -116,6 +118,7 @@
     border-radius: 15px;
     box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5);
     transition: 0.5s;
+    margin-top:-50px;
 }
 
 #enemy-front-row, #enemy-back-row, #my-front-row, #my-back-row {
@@ -303,6 +306,7 @@
     display: flex;
     justify-content: center;
     z-index: 100;
+    margin-top:150px;
 }
 
 .my-hand {

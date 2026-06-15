@@ -1,0 +1,416 @@
+﻿@page
+@model BgFootballCardGame.Pages.DeckBuilderModel
+@{
+    ViewData["Title"] = "Сглобяване на тесте";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8" />
+    <title>Deck Builder - BG Football Card</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #0a0a0a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        .builder-wrapper {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .collection-section {
+            width: 65vw;
+            height: 100%;
+            background: linear-gradient(180deg, #141414, #0b0b0b);
+            border-right: 3px solid #d4af37;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: #222;
+            border: 2px solid #444;
+            color: #aaa;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            border-color: #ffd700;
+            color: white;
+            background: #333;
+        }
+
+        .cards-grid {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .deck-section {
+            width: 35vw;
+            height: 100%;
+            background: #0d0d0d;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .deck-header {
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .deck-counter {
+            font-size: 1.5rem;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .deck-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 5px;
+        }
+
+        .deck-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .deck-item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-type {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .remove-btn:hover { background: #bd2130; }
+
+        .action-btns {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            flex-grow: 1;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-save { background: #28a745; color: white; }
+        .btn-save:hover { background: #218838; }
+        .btn-back { background: #6c757d; color: white; }
+        .btn-back:hover { background: #5a6268; }
+
+        .mini-card {
+            width: 120px;
+            height: 200px;
+            border-radius: 6px;
+            border: 2px solid #444;
+            cursor: pointer;
+            padding: 4px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .mini-card:hover {
+            transform: scale(1.05);
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            z-index: 10;
+        }
+
+.mini-title { 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            color: black; 
+            text-align: center; 
+            background: rgba(255,255,255,0.8); 
+            padding: 2px 4px; 
+            border-radius: 2px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            width: 100%;
+            box-sizing: border-box;
+        }        .mini-desc { font-size: 0.55rem; color: #fff; text-align: left; line-height: 1.1; background: rgba(0,0,0,0.6); padding: 2px; border-radius: 2px; flex-grow: 1; overflow: hidden; }
+        .mini-stats { font-size: 0.65rem; font-weight: bold; color: black; display: flex; justify-content: space-around; width: 100%; background: white; padding: 2px 0; border-radius: 2px; margin-top: 2px; }
+
+        .bg-footballer { background: linear-gradient(135deg, #ffd700, #b8860b); color: #222; }
+        .bg-spell { background: linear-gradient(135deg, #13547a, #80d0c7); color: white; }
+        .bg-trap { background: linear-gradient(135deg, #4a00e0, #8e2de2); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="builder-wrapper">
+    <div class="collection-section">
+        <h2 style="margin-top: 0; color: #ffd700;">КОЛЕКЦИЯ КАРТИ</h2>
+        <div class="filter-tabs">
+            <button class="tab-btn active" onclick="filterCollection('all')">Всички</button>
+            <button class="tab-btn" onclick="filterCollection('Footballer')">Футболисти</button>
+            <button class="tab-btn" onclick="filterCollection('Spell')">Магии</button>
+            <button class="tab-btn" onclick="filterCollection('Trap')">Капани</button>
+        </div>
+        <div class="cards-grid" id="collection-grid"></div>
+    </div>
+
+    <div class="deck-section">
+        <div class="deck-header">
+            <h2 style="margin: 0 0 5px 0;">ТВОЯТ ДЕК</h2>
+            <div class="deck-counter"><span id="current-count">0</span> / 40 КАРТИ</div>
+            <div style="font-size: 0.85rem; color: #aaa; margin-top: 5px;">
+                Изискване: точно 26 футболиста и 14 магии/капани.
+            </div>
+        </div>
+
+        <div class="deck-list" id="deck-items-container"></div>
+
+        <div class="action-btns">
+            <a asp-page="/Index" class="btn-action btn-back">Назад</a>
+            <button class="btn-action btn-save" onclick="saveDeck()">Запази Дек</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Пълната база данни на всички карти в играта (С точните статистики)
+    const allCardsDatabase = [
+        // Футболисти (Левски)
+        { name: "Mustafa Sangare", type: "Footballer", team: "Левски", baseAtk: 88, baseDef: 35, baseCon: 72, imgUrl: "/images/Sangare.png" },
+        { name: "Everton Bala", type: "Footballer", team: "Левски", baseAtk: 84, baseDef: 45, baseCon: 78, imgUrl: "/images/EvertonBala.png" },
+        { name: "Akram Bouras", type: "Footballer", team: "Левски", baseAtk: 76, baseDef: 68, baseCon: 82, imgUrl: "/images/ab47.png" },
+        { name: "Armstrong Oko-Flex", type: "Footballer", team: "Левски", baseAtk: 85, baseDef: 40, baseCon: 79, imgUrl: "/images/okoflex.png" },
+        { name: "Radoslav Kirilov", type: "Footballer", team: "Левски", baseAtk: 83, baseDef: 45, baseCon: 80, imgUrl: "/images/кирилов.png" },
+        { name: "Georgi Kostadinov", type: "Footballer", team: "Левски", baseAtk: 65, baseDef: 82, baseCon: 85, imgUrl: "/images/georgikostadinov.png" },
+        { name: "Mazire Soula", type: "Footballer", team: "Левски", baseAtk: 80, baseDef: 60, baseCon: 86, imgUrl: "/images/MazireSoula.png" },
+        { name: "Cristian Makoun", type: "Footballer", team: "Левски", baseAtk: 55, baseDef: 84, baseCon: 74, imgUrl: "/images/KristianMakoun.png" },
+        { name: "Aldair", type: "Footballer", team: "Левски", baseAtk: 68, baseDef: 81, baseCon: 76, imgUrl: "/images/aldair.png" },
+        { name: "Oliver Kamdem", type: "Footballer", team: "Левски", baseAtk: 65, baseDef: 80, baseCon: 75, imgUrl: "/images/kamdem.png" },
+        { name: "Maicon", type: "Footballer", team: "Левски", baseAtk: 72, baseDef: 80, baseCon: 75, imgUrl: "/images/Maicon.png" },
+        { name: "Kristiyan Dimitrov", type: "Footballer", team: "Левски", baseAtk: 62, baseDef: 83, baseCon: 68, imgUrl: "/images/kd50.png" },
+        { name: "Asen Mitkov", type: "Footballer", team: "Левски", baseAtk: 86, baseDef: 38, baseCon: 70, imgUrl: "/images/am10.png" },
+        { name: "Gasper Trdin", type: "Footballer", team: "Левски", baseAtk: 50, baseDef: 85, baseCon: 65, imgUrl: "/images/trdin.png" },
+        { name: "Svetoslav Vutsov", type: "Footballer", team: "Левски", baseAtk: 15, baseDef: 89, baseCon: 60, imgUrl: "/images/svetoslavvutsov.png" },
+        
+        // Футболисти (Лудогорец)
+        { name: "Sergio Padt", type: "Footballer", team: "Лудогорец", baseAtk: 12, baseDef: 88, baseCon: 65, imgUrl: "/images/SergioPadt.png" },
+        { name: "Anton Nedyalkov", type: "Footballer", team: "Лудогорец", baseAtk: 60, baseDef: 85, baseCon: 74, imgUrl: "/images/AntonNedyalkov.png" },
+        { name: "Olivier Verdon", type: "Footballer", team: "Лудогорец", baseAtk: 45, baseDef: 86, baseCon: 68, imgUrl: "/images/OlivierVerdon.png" },
+        { name: "Son", type: "Footballer", team: "Лудогорец", baseAtk: 70, baseDef: 82, baseCon: 76, imgUrl: "/images/Son.png" },
+        { name: "Dinis Almeida", type: "Footballer", team: "Лудогорец", baseAtk: 50, baseDef: 84, baseCon: 66, imgUrl: "/images/DinisAlmeida.png" },
+        { name: "Petar Stanic", type: "Footballer", team: "Лудогорец", baseAtk: 75, baseDef: 60, baseCon: 84, imgUrl: "/images/PetarStanic.png" },
+        { name: "Eric Marcus", type: "Footballer", team: "Лудогорец", baseAtk: 82, baseDef: 40, baseCon: 77, imgUrl: "/images/EricMarcus.png" },
+        { name: "Caio Vidal", type: "Footballer", team: "Лудогорец", baseAtk: 84, baseDef: 35, baseCon: 78, imgUrl: "/images/CaioVidal.png" },
+        { name: "Ivajlo Chochev", type: "Footballer", team: "Лудогорец", baseAtk: 78, baseDef: 72, baseCon: 85, imgUrl: "/images/IvajloChochev.png" },
+        { name: "Bernard Tekpetey", type: "Footballer", team: "Лудогорец", baseAtk: 86, baseDef: 42, baseCon: 79, imgUrl: "/images/BernardTekpetey.png" },
+        { name: "Deroy Duarte", type: "Footballer", team: "Лудогорец", baseAtk: 72, baseDef: 68, baseCon: 82, imgUrl: "/images/DeroyDuarte.png" },
+        { name: "Pedro Naressi", type: "Footballer", team: "Лудогорец", baseAtk: 68, baseDef: 78, baseCon: 83, imgUrl: "/images/PedroNaressi.png" },
+        { name: "Rwan Cruz", type: "Footballer", team: "Лудогорец", baseAtk: 87, baseDef: 30, baseCon: 75, imgUrl: "/images/RwanCruz.png" },
+        { name: "Kwadwo Duah", type: "Footballer", team: "Лудогорец", baseAtk: 88, baseDef: 32, baseCon: 74, imgUrl: "/images/KwadwoDuah.png" },
+        { name: "Yves Erick Bile", type: "Footballer", team: "Лудогорец", baseAtk: 83, baseDef: 38, baseCon: 76, imgUrl: "/images/YvesErickBile.png" },
+
+        // Магии (Spells)
+        { name: "Penalty", type: "Spell", effect: "Draw2", desc: "Изтегли 2 допълнителни карти от тестето си.", imgUrl: "/images/+2.png" },
+        { name: "Scout", type: "Spell", effect: "Search", desc: "Изтегли на случаен принцип 1 карта от тестето.", imgUrl: "/images/search.png" },
+        { name: "Assist", type: "Spell", effect: "+5 Точки", desc: "Избран футболист получава +5 атака.", imgUrl: "/images/+5.png" },
+
+        // Капани (Traps)
+        { name: "Tackle", type: "Trap", effect: "NegateAttack", desc: "Спира вражеската атака изцяло.", imgUrl: "/images/negate attack.png" },
+        { name: "Offside", type: "Trap", effect: "-5 Точки", desc: "Намалява силата на вражеския футболист с -5.", imgUrl: "/images/-5.png" },
+        { name: "Owngoal", type: "Trap", effect: "Автогол", desc: "Обръща щетите върху противника.", imgUrl: "/images/autogoal.png" }
+    ];
+
+    let currentDeck = [];
+
+    // Зарежда дек, ако играчът вече е записвал такъв
+    if (localStorage.getItem("myCustomDeck")) {
+        currentDeck = JSON.parse(localStorage.getItem("myCustomDeck"));
+    }
+
+    // Инициализация на екрана
+    renderCollection("all");
+    renderDeck();
+
+    function renderCollection(filterType) {
+        const grid = document.getElementById("collection-grid");
+        grid.innerHTML = "";
+
+        allCardsDatabase.forEach(card => {
+            if (filterType !== "all" && card.type !== filterType) return;
+
+            let cssClass = card.type === "Footballer" ? "bg-footballer" : card.type === "Spell" ? "bg-spell" : "bg-trap";
+            let inner = "";
+
+            if (card.type === "Footballer") {
+                inner = `
+                    <div class="mini-title">${card.name}</div>
+                    <div style="flex-grow: 1; margin: 2px 0; border: 1px solid #000; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #eee;">
+                        <img src="${card.imgUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/images/Maicon.png'"/>
+                    </div>
+                    <div class="mini-stats">
+                        <span>A: ${card.baseAtk}</span>
+                        <span>D: ${card.baseDef}</span>
+                        <span>C: ${card.baseCon}</span>
+                    </div>
+                `;
+            } else {
+                inner = `
+                    <div class="mini-title" style="background: rgba(0,0,0,0.5); color:white;">${card.name}</div>
+                    <div style="flex-grow: 1; margin: 2px 0; border: 1px solid #000; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #eee;">
+                        <img src="${card.imgUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/images/search.png'"/>
+                    </div>
+                    <div class="mini-desc">${card.desc}</div>
+                `;
+            }
+
+            const cardEl = document.createElement("div");
+            cardEl.className = `mini-card ${cssClass}`;
+            cardEl.innerHTML = inner;
+            cardEl.onclick = () => addCardToDeck(card);
+            grid.appendChild(cardEl);
+        });
+    }
+
+    function filterCollection(type) {
+        document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+        event.target.classList.add("active");
+        renderCollection(type);
+    }
+
+    function addCardToDeck(card) {
+        // Броим колко карти от даден тип/име вече имаме в дека
+        let footballersCount = currentDeck.filter(c => c.type === "Footballer").length;
+        let specificCardCount = currentDeck.filter(c => c.name === card.name).length;
+
+        // ПРОВЕРКА НА ЛИМИТИТЕ ЗА ФУТБОЛИСТИ И КОНКРЕТНИ КАРТИ
+        if (card.type === "Footballer" && footballersCount >= 26) {
+            alert("Вече имаш максималния брой от 26 футболиста в тестето!");
+            return;
+        }
+        if (card.name === "Penalty" && specificCardCount >= 2) { alert("Лимит: максимум 2 карти 'Penalty'!"); return; }
+        if (card.name === "Scout" && specificCardCount >= 2) { alert("Лимит: максимум 2 карти 'Scout'!"); return; }
+        if (card.name === "Assist" && specificCardCount >= 3) { alert("Лимит: максимум 3 карти 'Assist'!"); return; }
+        if (card.name === "Tackle" && specificCardCount >= 2) { alert("Лимит: максимум 2 карти 'Tackle'!"); return; }
+        if (card.name === "Offside" && specificCardCount >= 4) { alert("Лимит: максимум 4 карти 'Offside'!"); return; }
+        if (card.name === "Owngoal" && specificCardCount >= 1) { alert("Лимит: максимум 1 карта 'Owngoal'!"); return; }
+
+        // Проверка за общ брой карти
+        if (currentDeck.length >= 40) {
+            alert("Тестето достигна лимита си от 40 карти!");
+            return;
+        }
+
+        currentDeck.push(card);
+        renderDeck();
+    }
+
+    function removeCardFromDeck(index) {
+        currentDeck.splice(index, 1);
+        renderDeck();
+    }
+
+    function renderDeck() {
+        const container = document.getElementById("deck-items-container");
+        container.innerHTML = "";
+        document.getElementById("current-count").innerText = currentDeck.length;
+
+        currentDeck.forEach((card, index) => {
+            let badgeClass = card.type === "Footballer" ? "bg-footballer" : card.type === "Spell" ? "bg-spell" : "bg-trap";
+            let typeName = card.type === "Footballer" ? "ФУТ" : card.type === "Spell" ? "МАГ" : "КАП";
+
+            const item = document.createElement("div");
+            item.className = "deck-item";
+            item.innerHTML = `
+                <div class="deck-item-info">
+                    <span class="badge-type ${badgeClass}">${typeName}</span>
+                    <strong style="font-size:0.9rem;">${card.name}</strong>
+                </div>
+                <button class="remove-btn" onclick="removeCardFromDeck(${index})">X</button>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function saveDeck() {
+        if (currentDeck.length !== 40) {
+            alert("Тестето трябва да съдържа точно 40 карти! В момента са " + currentDeck.length);
+            return;
+        }
+        
+        let fCount = currentDeck.filter(c => c.type === "Footballer").length;
+        if (fCount !== 26) {
+            alert("Тестето не е валидно! Трябва да има точно 26 футболиста. В момента имаш " + fCount);
+            return;
+        }
+
+        localStorage.setItem("myCustomDeck", JSON.stringify(currentDeck));
+        alert("Тестето ви беше записано успешно! 💾⚽ Можете да стартирате играта.");
+    }
+</script>
+
+</body>
+</html>

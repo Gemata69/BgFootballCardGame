@@ -15,21 +15,39 @@ connection.on("ReceiveCardPlayed", function (playerName, handIndex, boardIndex, 
     }
 });
 const playerDatabase = [
+    //Levski 
     { name: "Mustafa Sangare", team: "Левски", imgUrl: "/images/Sangare.png", baseAtk: 88, baseDef: 35, baseCon: 72 },
     { name: "Everton Bala", team: "Левски", imgUrl: "/images/EvertonBala.png", baseAtk: 84, baseDef: 45, baseCon: 78 },
-    { name: "Akram Bouras", team: "Левски", imgUrl: "/images/AkramBouras.png", baseAtk: 76, baseDef: 68, baseCon: 82 },
+    { name: "Akram Bouras", team: "Левски", imgUrl: "/images/ab47.png", baseAtk: 76, baseDef: 68, baseCon: 82 },
     { name: "Armstrong Oko-Flex", team: "Левски", imgUrl: "/images/okoflex.png", baseAtk: 85, baseDef: 40, baseCon: 79 },
     { name: "Radoslav Kirilov", team: "Левски", imgUrl: "/images/кирилов.png", baseAtk: 83, baseDef: 45, baseCon: 80 },
     { name: "Georgi Kostadinov", team: "Левски", imgUrl: "/images/georgikostadinov.png", baseAtk: 65, baseDef: 82, baseCon: 85 },
     { name: "Mazire Soula", team: "Левски", imgUrl: "/images/MazireSoula.png", baseAtk: 80, baseDef: 60, baseCon: 86 },
     { name: "Cristian Makoun", team: "Левски", imgUrl: "/images/KristianMakoun.png", baseAtk: 55, baseDef: 84, baseCon: 74 },
     { name: "Aldair", team: "Левски", imgUrl: "/images/aldair.png", baseAtk: 68, baseDef: 81, baseCon: 76 },
-    { name: "Oliver Kamdem", team: "Левски", imgUrl: "/images/Kamdem.png", baseAtk: 65, baseDef: 80, baseCon: 75 },
+    { name: "Oliver Kamdem", team: "Левски", imgUrl: "/images/kamdem.png", baseAtk: 65, baseDef: 80, baseCon: 75 },
     { name: "Maicon", team: "Левски", imgUrl: "/images/Maicon.png", baseAtk: 72, baseDef: 80, baseCon: 75 },
-    { name: "Kristiyan Dimitrov", team: "Левски", imgUrl: "/images/Kristiyan Dimitrov.png", baseAtk: 62, baseDef: 83, baseCon: 68 },
-    { name: "Juan Perea", team: "Левски", imgUrl: "/images/Perea.png", baseAtk: 86, baseDef: 38, baseCon: 70 },
-    { name: "Nikola Serafimov", team: "Левски", imgUrl: "/images/Serafimov.png", baseAtk: 50, baseDef: 85, baseCon: 65 },
-    { name: "Svetoslav Vutsov", team: "Левски", imgUrl: "/images/svetoslavvutsov.png", baseAtk: 15, baseDef: 89, baseCon: 60 }
+    { name: "Kristiyan Dimitrov", team: "Левски", imgUrl: "/images/kd50.png", baseAtk: 62, baseDef: 83, baseCon: 68 },
+    { name: "Asen Mitkov", team: "Левски", imgUrl: "/images/am10.png", baseAtk: 86, baseDef: 38, baseCon: 70 },
+    { name: "Gasper Trdin", team: "Левски", imgUrl: "/images/trdin.png", baseAtk: 50, baseDef: 85, baseCon: 65 },
+    { name: "Svetoslav Vutsov", team: "Левски", imgUrl: "/images/svetoslavvutsov.png", baseAtk: 15, baseDef: 89, baseCon: 60 },
+
+    //Ludogorets 
+    { name: "Sergio Padt", team: "Лудогорец", imgUrl: "/images/SergioPadt.png", baseAtk: 12, baseDef: 88, baseCon: 65 },
+    { name: "Anton Nedyalkov", team: "Лудогорец", imgUrl: "/images/AntonNedyalkov.png", baseAtk: 60, baseDef: 85, baseCon: 74 },
+    { name: "Olivier Verdon", team: "Лудогорец", imgUrl: "/images/OlivierVerdon.png", baseAtk: 45, baseDef: 86, baseCon: 68 },
+    { name: "Son", team: "Лудогорец", imgUrl: "/images/Son.png", baseAtk: 70, baseDef: 82, baseCon: 76 },
+    { name: "Dinis Almeida", team: "Лудогорец", imgUrl: "/images/DinisAlmeida.png", baseAtk: 50, baseDef: 84, baseCon: 66 },
+    { name: "Petar Stanic", team: "Лудогорец", imgUrl: "/images/PetarStanic.png", baseAtk: 75, baseDef: 60, baseCon: 84 },
+    { name: "Eric Marcus", team: "Лудогорец", imgUrl: "/images/EricMarcus.png", baseAtk: 82, baseDef: 40, baseCon: 77 },
+    { name: "Caio Vidal", team: "Лудогорец", imgUrl: "/images/CaioVidal.png", baseAtk: 84, baseDef: 35, baseCon: 78 },
+    { name: "Ivajlo Chochev", team: "Лудогорец", imgUrl: "/images/IvajloChochev.png", baseAtk: 78, baseDef: 72, baseCon: 85 },
+    { name: "Bernard Tekpetey", team: "Лудогорец", imgUrl: "/images/BernardTekpetey.png", baseAtk: 86, baseDef: 42, baseCon: 79 },
+    { name: "Deroy Duarte", team: "Лудогорец", imgUrl: "/images/DeroyDuarte.png", baseAtk: 72, baseDef: 68, baseCon: 82 },
+    { name: "Pedro Naressi", team: "Лудогорец", imgUrl: "/images/PedroNaressi.png", baseAtk: 68, baseDef: 78, baseCon: 83 },
+    { name: "Rwan Cruz", team: "Лудогорец", imgUrl: "/images/RwanCruz.png", baseAtk: 87, baseDef: 30, baseCon: 75 },
+    { name: "Kwadwo Duah", team: "Лудогорец", imgUrl: "/images/KwadwoDuah.png", baseAtk: 88, baseDef: 32, baseCon: 74 },
+    { name: "Yves Erick Bile", team: "Лудогорец", imgUrl: "/images/YvesErickBile.png", baseAtk: 83, baseDef: 38, baseCon: 76 }
 ];
 
 // 40 cards in one deck
@@ -60,7 +78,44 @@ function createDeck() {
     return deck.sort(() => Math.random() - 0.5);
 }
 
-let myDeck = createDeck();
+let myDeck = [];
+let savedCustomDeck = localStorage.getItem("myCustomDeck");
+
+if (savedCustomDeck) {
+    let parsedDeck = JSON.parse(savedCustomDeck);
+
+    // Transform the cards to match exactly what the game expects
+    myDeck = parsedDeck.map(card => {
+        if (card.type === "Footballer") {
+            return {
+                name: card.name,
+                type: "Footballer",
+                atk: card.baseAtk, 
+                def: card.baseDef, 
+                con: card.baseCon, 
+                imgUrl: card.imgUrl
+            };
+        } else {
+            return {
+                name: card.name,
+                type: card.type,
+                effect: card.effect,
+                desc: card.desc,
+                img: card.imgUrl 
+            };
+        }
+    });
+
+    // Shuffle the deck so every game is different
+    myDeck = myDeck.sort(() => Math.random() - 0.5);
+    console.log("Successfully loaded custom Deck of 40 cards!");
+} else {
+    // Fallback: If the player enters without using the Deck Builder, provide a default deck
+    myDeck = createDeck();
+    console.log("Loaded automatically generated Deck (player has no custom deck).");
+}
+
+// The enemy currently always plays with a randomly generated valid deck
 let enemyDeck = createDeck();
 let myBenchCount = 0;
 let enemyBenchCount = 0;
@@ -102,6 +157,7 @@ let currentMyStat = "";
 let currentEnemyStat = "";
 let myLifePoints = 30;
 let enemyLifePoints = 30;
+let isSelectingTrap = false;
 
 // -- DICES & START SEQUENCE --
 const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
@@ -192,13 +248,20 @@ function startRoundFlow() {
             clearHighlights();
             document.getElementById("my-hand-container").style.pointerEvents = "none";
 
-            if (myActiveTrap) {
-                document.getElementById("trap-question").innerText = `Искате ли да активирате капана си: ${myActiveTrap.name}?`;
+            let hasTrapOnField = false;
+            document.querySelectorAll("#my-back-row .my-board-slot").forEach(slot => {
+                let data = slot.getAttribute("data-fullcard");
+                if (data && JSON.parse(data).type === "Trap" && slot.classList.contains("card-back")) {
+                    hasTrapOnField = true;
+                }
+            });
+
+            if (hasTrapOnField) {
+                document.getElementById("trap-question").innerText = "Имате поставен капан! Искате ли да активирате някой от тях?";
                 document.getElementById("trap-prompt-modal").style.display = "block";
             } else {
                 executeBattlePhase(false);
             }
-
         } else {
             timerElement.innerText = "Оставащо време: " + timeLeft + " сек.";
             timeLeft--;
@@ -234,11 +297,23 @@ function startRoundFlow() {
 // -- TRAPS & BATTLE PHASE --
 document.getElementById("btn-trap-yes").addEventListener("click", function () {
     document.getElementById("trap-prompt-modal").style.display = "none";
-    executeBattlePhase(true);
+
+    isSelectingTrap = true;
+
+    document.getElementById("battle-condition-text").innerText = "КЛИКНИ ВЪРХУ КАПАНА, КОЙТО ИСКАШ ДА АКТИВИРАШ!";
+    document.getElementById("battle-condition-banner").style.display = "block";
+
+    document.querySelectorAll("#my-back-row .my-board-slot").forEach(slot => {
+        let data = slot.getAttribute("data-fullcard");
+        if (data && JSON.parse(data).type === "Trap" && slot.classList.contains("card-back")) {
+            slot.classList.add("glow-slot");
+        }
+    });
 });
 
 document.getElementById("btn-trap-no").addEventListener("click", function () {
     document.getElementById("trap-prompt-modal").style.display = "none";
+    myActiveTrap = null;
     executeBattlePhase(false);
 });
 
@@ -409,17 +484,33 @@ function executeBattlePhase(userActivatedTrap) {
             let enemyCardsCleared = 0;
 
             document.querySelectorAll(".enemy-board-slot").forEach(slot => {
-                if (slot.classList.contains("card-filled") || slot.classList.contains("card-back")) enemyCardsCleared++;
-                let index = parseInt(slot.getAttribute("data-slot-index"));
-                slot.innerHTML = "Слот " + (index + 1);
-                slot.className = "card-slot enemy-board-slot";
+                if (slot.classList.contains("card-filled")) {
+                    enemyCardsCleared++;
+                    let index = parseInt(slot.getAttribute("data-slot-index"));
+                    slot.innerHTML = "Слот " + (index + 1);
+                    slot.className = "card-slot enemy-board-slot";
+                }
             });
 
             document.querySelectorAll(".my-board-slot").forEach(slot => {
-                if (slot.classList.contains("card-filled")) myCardsCleared++;
-                let index = parseInt(slot.getAttribute("data-slot-index"));
-                slot.innerHTML = "Слот " + (index + 1);
-                slot.className = "card-slot my-board-slot";
+                let shouldClear = false;
+                let dataStr = slot.getAttribute("data-fullcard");
+
+                if (dataStr) {
+                    let cardObj = JSON.parse(dataStr);
+                    if (cardObj.type === "Footballer") shouldClear = true;
+                    if (slot.classList.contains("used-this-turn")) shouldClear = true;
+                }
+
+                if (shouldClear) {
+                    myCardsCleared++;
+                    let index = parseInt(slot.getAttribute("data-slot-index"));
+                    slot.innerHTML = "Слот " + (index + 1);
+                    slot.className = "card-slot my-board-slot";
+                    slot.removeAttribute("data-fullcard");
+                    slot.removeAttribute("data-innerhtml");
+                    slot.removeAttribute("data-cssclass");
+                }
             });
 
             if (myCardsCleared > 0) {
@@ -465,8 +556,8 @@ function addNewCardToHand(cardObj) {
         let imgPath = cardObj.imgUrl || "/images/Maicon.png";
         innerContent = `
             <div class="card-title">${cardObj.name}</div>
-            <div class="card-image-wrapper">
-                <img src="${imgPath}" class="card-image" onerror="this.src='/images/Maicon.png'" alt="Player" />
+            <div class="card-image-wrapper" style="width: 100%; height: 12vh; overflow: hidden; display: flex; justify-content: center; align-items: center; background-color: #eee;">
+                <img src="${imgPath}" class="card-image" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;" onerror="this.src='/images/Maicon.png'" alt="Player" />
             </div>
             <div class="card-textbox">
                 <div class="card-description"><b>[Footballer / Effect]</b><br/>Основен играч.</div>
@@ -520,12 +611,10 @@ function clearHighlights() {
 }
 
 function reloadHandClickEvents() {
-    // ВНИМАНИЕ: Ако картите не се селектират правилно, смени ".my-hand" на "#my-hand-container"
     document.querySelectorAll(".my-hand .card-slot").forEach((card) => card.replaceWith(card.cloneNode(true)));
 
     document.querySelectorAll(".my-hand .card-slot").forEach((card, index) => {
 
-        // 1. СЪБИТИЕ ЗА КЛИКВАНЕ (Твоето оригинално)
         card.addEventListener("click", function () {
             if (!isGameStarted || timeLeft <= 0) return;
 
@@ -541,7 +630,6 @@ function reloadHandClickEvents() {
             });
         });
 
-        // 2. СЪБИТИЯ ЗА ПОКАЗВАНЕ НА ГОЛЯМАТА КАРТА (Добавени тук!)
         card.addEventListener("mouseenter", function () {
             showPreview(this.innerHTML, this.style.cssText, this.className);
         });
@@ -553,38 +641,76 @@ function reloadHandClickEvents() {
 }
 
 document.querySelectorAll(".my-board-slot").forEach(slot => {
+
+    slot.addEventListener("mouseenter", function () {
+        let savedHTML = this.getAttribute("data-innerhtml");
+        let savedClass = this.getAttribute("data-cssclass");
+
+        if (savedHTML) {
+            showPreview(savedHTML, "", savedClass);
+        }
+    });
+
+    slot.addEventListener("mouseleave", function () {
+        hidePreview();
+    });
+
     slot.addEventListener("click", function () {
+
         if (this.classList.contains("glow-slot") && selectedCardElement !== null) {
 
             let cardData = JSON.parse(selectedCardElement.getAttribute("data-fullcard"));
             let boardIndex = parseInt(this.getAttribute("data-slot-index"));
-            let myName = "@Model.Game.Player1.Name"; 
+            let myName = "@Model.Game.Player1.Name";
 
             connection.invoke("PlayCard", myName, selectedCardIndex, boardIndex, isFrontRowTarget)
                 .catch(err => console.error(err.toString()));
 
-            this.className = selectedCardElement.className + " my-board-slot";
-            this.classList.remove("glow-slot");
-            this.innerHTML = selectedCardElement.innerHTML;
-            this.setAttribute("data-fullcard", selectedCardElement.getAttribute("data-fullcard"));
+            this.setAttribute("data-fullcard", JSON.stringify(cardData));
+            this.setAttribute("data-innerhtml", selectedCardElement.innerHTML);
+            this.setAttribute("data-cssclass", selectedCardElement.className);
 
+            if (cardData.type === "Trap" || (cardData.type === "Spell" && cardData.name !== "Assist")) {
+                this.className = "card-slot my-board-slot card-back";
+                this.innerHTML = "";
+            } else {
+                this.className = selectedCardElement.className + " my-board-slot";
+                this.innerHTML = selectedCardElement.innerHTML;
+            }
+
+            this.classList.remove("glow-slot");
             selectedCardElement.remove();
             selectedCardElement = null;
             clearHighlights();
-
-            if (cardData.type === "Trap") {
-                myActiveTrap = cardData;
-            }
 
             if (cardData.type === "Spell" && cardData.effect === "Draw2") {
                 alert("✨ Активираш Спел: ТЕГЛЕНЕ НА 2 КАРТИ!");
                 drawCardFromDeck();
                 drawCardFromDeck();
+                this.classList.add("used-this-turn"); 
             }
-
             if (cardData.type === "Spell" && cardData.effect === "Search") {
                 document.getElementById("spell-search-modal").style.display = "block";
+                this.classList.add("used-this-turn"); 
             }
+
+            if (cardData.type === "Spell" && cardData.name === "Assist") {
+                this.classList.add("used-this-turn");
+            }
+        }
+
+        else if (isSelectingTrap && this.classList.contains("glow-slot")) {
+            let cardData = JSON.parse(this.getAttribute("data-fullcard"));
+
+            isSelectingTrap = false;
+            document.getElementById("battle-condition-banner").style.display = "none";
+            clearHighlights();
+
+            this.className = this.getAttribute("data-cssclass") + " my-board-slot used-this-turn";
+            this.innerHTML = this.getAttribute("data-innerhtml");
+
+            myActiveTrap = cardData;
+            executeBattlePhase(true);
         }
     });
 });
@@ -714,9 +840,38 @@ function showPreview(cardHTML, cardStyle, cardClasses) {
     }
 }
 
+
+
 function hidePreview() {
     const previewPanel = document.getElementById("card-preview-panel");
     if (previewPanel) previewPanel.style.display = "none";
 }
+
+// --- HAMBURGER MENU & LEAVE GAME LOGIC ---
+
+document.getElementById("hamburger-btn").addEventListener("click", function () {
+    let dropdown = document.getElementById("dropdown-content");
+    if (dropdown.style.display === "none") {
+        dropdown.style.display = "block";
+    } else {
+        dropdown.style.display = "none";
+    }
+});
+
+document.addEventListener("click", function (event) {
+    let menu = document.getElementById("game-options-menu");
+    let dropdown = document.getElementById("dropdown-content");
+    if (!menu.contains(event.target)) {
+        dropdown.style.display = "none";
+    }
+});
+
+document.getElementById("btn-leave-game").addEventListener("click", function () {
+if (confirm("Сигурни ли сте, че искате да излезете от играта?")) {
+    window.location.href = "/Index";
+} else {
+    document.getElementById("dropdown-content").style.display = "none";
+}
+});
 
 reloadHandClickEvents();

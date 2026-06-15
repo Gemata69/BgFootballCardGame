@@ -15,6 +15,21 @@
 </head>
 <body>
 
+    @* Hamburger Menu *@
+    <div id="game-options-menu" style="position: fixed; top: 20px; right: 20px; z-index: 3000;">
+        <div id="hamburger-btn" style="cursor: pointer; background: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 5px; border: 2px solid #ffd700; display: flex; flex-direction: column; gap: 5px; transition: 0.2s;">
+            <div style="width: 25px; height: 3px; background-color: white;"></div>
+            <div style="width: 25px; height: 3px; background-color: white;"></div>
+            <div style="width: 25px; height: 3px; background-color: white;"></div>
+        </div>
+
+        <div id="dropdown-content" style="display: none; position: absolute; top: 50px; right: 0; background: rgba(0, 0, 0, 0.95); border: 2px solid #ffd700; border-radius: 5px; padding: 10px; width: 180px; box-shadow: 0 0 15px rgba(0,0,0,0.8);">
+            <button id="btn-leave-game" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #dc3545, #901c24); color: white; border: 1px solid #ff4444; border-radius: 3px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 1.4vh; transition: 0.2s;">
+                🚪 Напусни играта
+            </button>
+        </div>
+    </div>
+
 @* Dice screen *@
 <div id="dice-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;">
     <h1 id="dice-status-text" style="color: #ffd700; margin-bottom: 40px; font-size: 2.5em; text-transform: uppercase;">Кой ще започне пръв?</h1>
@@ -80,6 +95,8 @@
                 <button id="board-btn-mute" class="board-audio-btn">🔊</button>
                 <input type="range" id="board-volume-slider" class="board-volume-slider" min="0" max="1" step="0.05" value="0.2" />
             </div>
+
+
 
             <div id="card-preview-panel" style="margin-top: 20px; width: 240px; height: 360px; border-radius: 8px; display: none; box-shadow: 0 0 20px rgba(0,0,0,0.8); pointer-events: none; z-index: 100;"></div>
         
