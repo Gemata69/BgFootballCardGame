@@ -47,7 +47,211 @@ const playerDatabase = [
     { name: "Pedro Naressi", team: "Лудогорец", imgUrl: "/images/PedroNaressi.png", baseAtk: 68, baseDef: 78, baseCon: 83 },
     { name: "Rwan Cruz", team: "Лудогорец", imgUrl: "/images/RwanCruz.png", baseAtk: 87, baseDef: 30, baseCon: 75 },
     { name: "Kwadwo Duah", team: "Лудогорец", imgUrl: "/images/KwadwoDuah.png", baseAtk: 88, baseDef: 32, baseCon: 74 },
-    { name: "Yves Erick Bile", team: "Лудогорец", imgUrl: "/images/YvesErickBile.png", baseAtk: 83, baseDef: 38, baseCon: 76 }
+    { name: "Yves Erick Bile", team: "Лудогорец", imgUrl: "/images/YvesErickBile.png", baseAtk: 83, baseDef: 38, baseCon: 76 },
+
+    // CSKA
+    { name: "Ioannis Pittas", team: "ЦСКА", imgUrl: "/images/IoannisPittas.png", baseAtk: 85, baseDef: 35, baseCon: 75 },
+    { name: "Leandro Godoy", team: "ЦСКА", imgUrl: "/images/LeandroGodoy.png", baseAtk: 82, baseDef: 30, baseCon: 72 },
+    { name: "Fedor Lapoukhov", team: "ЦСКА", imgUrl: "/images/FedorLapoukhov.png", baseAtk: 15, baseDef: 85, baseCon: 60 },
+    { name: "Lumbardh Dellova", team: "ЦСКА", imgUrl: "/images/LumbardhDellova.png", baseAtk: 45, baseDef: 82, baseCon: 70 },
+    { name: "Teodor Ivanov", team: "ЦСКА", imgUrl: "/images/TeodorIvanov.png", baseAtk: 40, baseDef: 75, baseCon: 65 },
+    { name: "James Etoo", team: "ЦСКА", imgUrl: "/images/JamesEtoo.png", baseAtk: 62, baseDef: 78, baseCon: 80 },
+    { name: "Leo Pereira", team: "ЦСКА", imgUrl: "/images/LeoPereira.png", baseAtk: 78, baseDef: 40, baseCon: 75 },
+    { name: "Bruno Jordao", team: "ЦСКА", imgUrl: "/images/BrunoJordao.png", baseAtk: 70, baseDef: 70, baseCon: 82 },
+    { name: "Isaac Solet", team: "ЦСКА", imgUrl: "/images/IsaacSolet.png", baseAtk: 65, baseDef: 75, baseCon: 78 },
+    { name: "Max Ebong", team: "ЦСКА", imgUrl: "/images/MaxEbong.png", baseAtk: 74, baseDef: 65, baseCon: 80 },
+    { name: "Petko Panayotov", team: "ЦСКА", imgUrl: "/images/PetkoPanayotov.png", baseAtk: 68, baseDef: 60, baseCon: 75 },
+    { name: "Mohamed Brahimi", team: "ЦСКА", imgUrl: "/images/MohamedBrahimi.png", baseAtk: 78, baseDef: 45, baseCon: 72 },
+    { name: "Alejandro Piedrahita", team: "ЦСКА", imgUrl: "/images/AlejandroPiedrahita.png", baseAtk: 76, baseDef: 50, baseCon: 74 },
+    { name: "Angelo Martino", team: "ЦСКА", imgUrl: "/images/AngeloMartino.png", baseAtk: 65, baseDef: 78, baseCon: 76 },
+    { name: "Adrian Lapena", team: "ЦСКА", imgUrl: "/images/AdrianLapena.png", baseAtk: 50, baseDef: 80, baseCon: 68 },
+
+    // Lokomotiv Plovdiv
+    { name: "Dimitar Iliev", team: "Локомотив Пловдив", imgUrl: "/images/DimitarIliev.png", baseAtk: 84, baseDef: 40, baseCon: 82 },
+    { name: "Joel Zwarts", team: "Локомотив Пловдив", imgUrl: "/images/JoelZwarts.png", baseAtk: 79, baseDef: 35, baseCon: 70 },
+    { name: "Petar Zovko", team: "Локомотив Пловдив", imgUrl: "/images/PetarZovko.png", baseAtk: 12, baseDef: 78, baseCon: 60 },
+    { name: "Adrian Cova", team: "Локомотив Пловдив", imgUrl: "/images/AdrianCova.png", baseAtk: 60, baseDef: 72, baseCon: 68 },
+    { name: "Andrei Chindris", team: "Локомотив Пловдив", imgUrl: "/images/AndreiChindris.png", baseAtk: 45, baseDef: 76, baseCon: 65 },
+    { name: "Kaloyan Kostov", team: "Локомотив Пловдив", imgUrl: "/images/KaloyanKostov.png", baseAtk: 40, baseDef: 70, baseCon: 62 },
+    { name: "Parvizdzhon Umarbaev", team: "Локомотив Пловдив", imgUrl: "/images/ParvizdzhonUmarbaev.png", baseAtk: 72, baseDef: 60, baseCon: 80 },
+    { name: "Catalin Itu", team: "Локомотив Пловдив", imgUrl: "/images/CatalinItu.png", baseAtk: 68, baseDef: 65, baseCon: 74 },
+    { name: "Sevi Idriz", team: "Локомотив Пловдив", imgUrl: "/images/SeviIdriz.png", baseAtk: 65, baseDef: 55, baseCon: 68 },
+    { name: "Julien Lamy", team: "Локомотив Пловдив", imgUrl: "/images/JulienLamy.png", baseAtk: 76, baseDef: 40, baseCon: 72 },
+    { name: "Francisko Politano", team: "Локомотив Пловдив", imgUrl: "/images/FranciskoPolitano.png", baseAtk: 75, baseDef: 45, baseCon: 70 },
+    { name: "Efe Ali", team: "Локомотив Пловдив", imgUrl: "/images/EfeAli.png", baseAtk: 45, baseDef: 74, baseCon: 65 },
+    { name: "Martin Atanasov", team: "Локомотив Пловдив", imgUrl: "/images/MartinAtanasov.png", baseAtk: 70, baseDef: 50, baseCon: 68 },
+    { name: "Miha Trdan", team: "Локомотив Пловдив", imgUrl: "/images/MihaTrdan.png", baseAtk: 68, baseDef: 62, baseCon: 72 },
+    { name: "Todor Pavlov", team: "Локомотив Пловдив", imgUrl: "/images/TodorPavlov.png", baseAtk: 40, baseDef: 75, baseCon: 64 },
+    { name: "Lucas Ryan", team: "Локомотив Пловдив", imgUrl: "/images/LucasRyan.png", baseAtk: 65, baseDef: 70, baseCon: 68 },
+
+    // Botev Plovdiv
+    { name: "Daniel Naumov", team: "Ботев Пловдив", imgUrl: "/images/DanielNaumov.png", baseAtk: 15, baseDef: 85, baseCon: 65 },
+    { name: "Antonine Conte", team: "Ботев Пловдив", imgUrl: "/images/AntonineConte.png", baseAtk: 50, baseDef: 80, baseCon: 70 },
+    { name: "Gabriel Noga", team: "Ботев Пловдив", imgUrl: "/images/GabrielNoga.png", baseAtk: 45, baseDef: 78, baseCon: 65 },
+    { name: "Nikola Soldo", team: "Ботев Пловдив", imgUrl: "/images/NikolaSoldo.png", baseAtk: 48, baseDef: 77, baseCon: 66 },
+    { name: "Simeon Petrov", team: "Ботев Пловдив", imgUrl: "/images/SimeonPetrov.png", baseAtk: 40, baseDef: 75, baseCon: 62 },
+    { name: "Emerson Rodriguez", team: "Ботев Пловдив", imgUrl: "/images/EmersonRodriguez.png", baseAtk: 78, baseDef: 40, baseCon: 74 },
+    { name: "Nikola Iliev", team: "Ботев Пловдив", imgUrl: "/images/NikolaIliev.png", baseAtk: 80, baseDef: 45, baseCon: 76 },
+    { name: "Todor Nedelev", team: "Ботев Пловдив", imgUrl: "/images/TodorNedelev.png", baseAtk: 82, baseDef: 50, baseCon: 88 },
+    { name: "Samuel Kalu", team: "Ботев Пловдив", imgUrl: "/images/SamuelKalu.png", baseAtk: 80, baseDef: 42, baseCon: 75 },
+    { name: "Ederson Silva", team: "Ботев Пловдив", imgUrl: "/images/EdersonSilva.png", baseAtk: 75, baseDef: 55, baseCon: 70 },
+    { name: "Ifenna Dorgu", team: "Ботев Пловдив", imgUrl: "/images/IfennaDorgu.png", baseAtk: 76, baseDef: 48, baseCon: 72 },
+    { name: "Aleksa Maras", team: "Ботев Пловдив", imgUrl: "/images/AleksaMaras.png", baseAtk: 82, baseDef: 35, baseCon: 70 },
+    { name: "Franklin Mascote", team: "Ботев Пловдив", imgUrl: "/images/FranklinMascote.png", baseAtk: 70, baseDef: 74, baseCon: 72 },
+    { name: "Henrique Jocu", team: "Ботев Пловдив", imgUrl: "/images/HenriqueJocu.png", baseAtk: 65, baseDef: 72, baseCon: 76 },
+    { name: "Lucas Araujo", team: "Ботев Пловдив", imgUrl: "/images/LucasAraujo.png", baseAtk: 68, baseDef: 60, baseCon: 75 },
+
+    // Cherno More
+    { name: "Kristian Tomov", team: "Черно море", imgUrl: "/images/KristianTomov.png", baseAtk: 15, baseDef: 82, baseCon: 60 },
+    { name: "Zhivko Atanasov", team: "Черно море", imgUrl: "/images/ZhivkoAtanasov.png", baseAtk: 40, baseDef: 80, baseCon: 65 },
+    { name: "Asen Donchev", team: "Черно море", imgUrl: "/images/AsenDonchev.png", baseAtk: 55, baseDef: 75, baseCon: 70 },
+    { name: "Ertan Tombak", team: "Черно море", imgUrl: "/images/ErtanTombak.png", baseAtk: 60, baseDef: 78, baseCon: 68 },
+    { name: "Rosen Stefanov", team: "Черно море", imgUrl: "/images/RosenStefanov.png", baseAtk: 35, baseDef: 76, baseCon: 62 },
+    { name: "Jorge Padilla", team: "Черно море", imgUrl: "/images/JorgePadilla.png", baseAtk: 50, baseDef: 74, baseCon: 66 },
+    { name: "Celso Sidney", team: "Черно море", imgUrl: "/images/CelsoSidney.png", baseAtk: 65, baseDef: 70, baseCon: 70 },
+    { name: "Georgi Lazarov", team: "Черно море", imgUrl: "/images/GeorgiLazarov.png", baseAtk: 72, baseDef: 45, baseCon: 68 },
+    { name: "Nikolay Zlatev", team: "Черно море", imgUrl: "/images/NikolayZlatev.png", baseAtk: 75, baseDef: 40, baseCon: 70 },
+    { name: "Asen Chandarov", team: "Черно море", imgUrl: "/images/AsenChandarov.png", baseAtk: 70, baseDef: 65, baseCon: 82 },
+    { name: "Vasil Panayotov", team: "Черно море", imgUrl: "/images/VasilPanayotov.png", baseAtk: 68, baseDef: 68, baseCon: 80 },
+    { name: "Andreas Calcan", team: "Черно море", imgUrl: "/images/AndreasCalcan.png", baseAtk: 78, baseDef: 42, baseCon: 75 },
+    { name: "Berk Beyhan", team: "Черно море", imgUrl: "/images/BerkBeyhan.png", baseAtk: 65, baseDef: 60, baseCon: 70 },
+    { name: "João Bandaro", team: "Черно море", imgUrl: "/images/JoaoBandaro.png", baseAtk: 74, baseDef: 45, baseCon: 72 },
+    { name: "Dimitar Tonev", team: "Черно море", imgUrl: "/images/DimitarTonev.png", baseAtk: 76, baseDef: 50, baseCon: 78 },
+
+    // Slavia Sofia
+    { name: "Levi Ntumba", team: "Славия", imgUrl: "/images/LeviNtumba.png", baseAtk: 15, baseDef: 80, baseCon: 60 },
+    { name: "Jordan Varela", team: "Славия", imgUrl: "/images/JordanVarela.png", baseAtk: 50, baseDef: 76, baseCon: 68 },
+    { name: "David Malembana", team: "Славия", imgUrl: "/images/DavidMalembana.png", baseAtk: 40, baseDef: 78, baseCon: 64 },
+    { name: "Diego Ferraresso", team: "Славия", imgUrl: "/images/DiegoFerraresso.png", baseAtk: 68, baseDef: 70, baseCon: 75 },
+    { name: "Nikola Savić", team: "Славия", imgUrl: "/images/NikolaSavic.png", baseAtk: 38, baseDef: 75, baseCon: 62 },
+    { name: "Emil Stoev", team: "Славия", imgUrl: "/images/EmilStoev.png", baseAtk: 76, baseDef: 45, baseCon: 74 },
+    { name: "Kristiyan Balov", team: "Славия", imgUrl: "/images/KristiyanBalov.png", baseAtk: 65, baseDef: 55, baseCon: 68 },
+    { name: "Iliyan Stefanov", team: "Славия", imgUrl: "/images/IliyanStefanov.png", baseAtk: 80, baseDef: 48, baseCon: 78 },
+    { name: "Roberto Raychev", team: "Славия", imgUrl: "/images/RobertoRaychev.png", baseAtk: 74, baseDef: 40, baseCon: 70 },
+    { name: "Kristiyan Stoyanov", team: "Славия", imgUrl: "/images/KristiyanStoyanov.png", baseAtk: 62, baseDef: 65, baseCon: 72 },
+    { name: "Yanis Guermouche", team: "Славия", imgUrl: "/images/YanisGuermouche.png", baseAtk: 78, baseDef: 35, baseCon: 72 },
+    { name: "Lyubomir Kostov", team: "Славия", imgUrl: "/images/LyubomirKostov.png", baseAtk: 66, baseDef: 60, baseCon: 68 },
+    { name: "Ivan Minchev", team: "Славия", imgUrl: "/images/IvanMinchev.png", baseAtk: 70, baseDef: 55, baseCon: 82 },
+    { name: "Vladimir Medved", team: "Славия", imgUrl: "/images/VladimirMedved.png", baseAtk: 75, baseDef: 40, baseCon: 70 },
+    { name: "Mouhamed Dosso", team: "Славия", imgUrl: "/images/MouhamedDosso.png", baseAtk: 68, baseDef: 65, baseCon: 72 },
+
+    // Botev Vratsa
+    { name: "Mitchy Ntelo", team: "Ботев Враца", imgUrl: "/images/MitchyNtelo.png", baseAtk: 80, baseDef: 35, baseCon: 70 },
+    { name: "Martin Petkov", team: "Ботев Враца", imgUrl: "/images/MartinPetkov.png", baseAtk: 78, baseDef: 40, baseCon: 72 },
+    { name: "Marin Orlinov", team: "Ботев Враца", imgUrl: "/images/MarinOrlinov.png", baseAtk: 15, baseDef: 78, baseCon: 60 },
+    { name: "Tamimou Ouorou", team: "Ботев Враца", imgUrl: "/images/TamimouOuorou.png", baseAtk: 40, baseDef: 76, baseCon: 62 },
+    { name: "Sainey Sanyang", team: "Ботев Враца", imgUrl: "/images/SaineySanyang.png", baseAtk: 60, baseDef: 74, baseCon: 68 },
+    { name: "Martin Stoychev", team: "Ботев Враца", imgUrl: "/images/MartinStoychev.png", baseAtk: 55, baseDef: 72, baseCon: 65 },
+    { name: "Ivan Goranov", team: "Ботев Враца", imgUrl: "/images/IvanGoranov.png", baseAtk: 62, baseDef: 75, baseCon: 70 },
+    { name: "Milen Stoev", team: "Ботев Враца", imgUrl: "/images/MilenStoev.png", baseAtk: 45, baseDef: 72, baseCon: 64 },
+    { name: "José Gallegos", team: "Ботев Враца", imgUrl: "/images/JoseGallegos.png", baseAtk: 68, baseDef: 60, baseCon: 74 },
+    { name: "Kristiyan Malinov", team: "Ботев Враца", imgUrl: "/images/KristiyanMalinov.png", baseAtk: 72, baseDef: 68, baseCon: 82 },
+    { name: "Radoslav Tsonev", team: "Ботев Враца", imgUrl: "/images/RadoslavTsonev.png", baseAtk: 74, baseDef: 60, baseCon: 84 },
+    { name: "Martin Smolenski", team: "Ботев Враца", imgUrl: "/images/MartinSmolenski.png", baseAtk: 76, baseDef: 45, baseCon: 78 },
+    { name: "Daniel Genov", team: "Ботев Враца", imgUrl: "/images/DanielGenov.png", baseAtk: 78, baseDef: 40, baseCon: 72 },
+    { name: "Iliya Yurukov", team: "Ботев Враца", imgUrl: "/images/IliyaYurukov.png", baseAtk: 65, baseDef: 70, baseCon: 76 },
+    { name: "Kassim Hadji", team: "Ботев Враца", imgUrl: "/images/KassimHadji.png", baseAtk: 70, baseDef: 60, baseCon: 70 },
+
+    // Arda Kardzhali
+    { name: "Anatoli Gospodinov", team: "Арда", imgUrl: "/images/AnatoliGospodinov.png", baseAtk: 12, baseDef: 83, baseCon: 60 },
+    { name: "Calal Huseinov", team: "Арда", imgUrl: "/images/CalalHuseinov.png", baseAtk: 45, baseDef: 76, baseCon: 64 },
+    { name: "Gustavo Cascardo", team: "Арда", imgUrl: "/images/GustavoCascardo.png", baseAtk: 58, baseDef: 74, baseCon: 68 },
+    { name: "Dimitar Velkovski", team: "Арда", imgUrl: "/images/DimitarVelkovski.png", baseAtk: 60, baseDef: 75, baseCon: 70 },
+    { name: "Martin Paskalev", team: "Арда", imgUrl: "/images/MartinPaskalev.png", baseAtk: 42, baseDef: 77, baseCon: 65 },
+    { name: "Emil Viyachki", team: "Арда", imgUrl: "/images/EmilViyachki.png", baseAtk: 40, baseDef: 78, baseCon: 63 },
+    { name: "Plamen Krachunov", team: "Арда", imgUrl: "/images/PlamenKrachunov.png", baseAtk: 38, baseDef: 76, baseCon: 60 },
+    { name: "Wilson Samaké", team: "Арда", imgUrl: "/images/WilsonSamake.png", baseAtk: 81, baseDef: 32, baseCon: 70 },
+    { name: "Georgi Nikolov", team: "Арда", imgUrl: "/images/GeorgiNikolov.png", baseAtk: 83, baseDef: 35, baseCon: 72 },
+    { name: "Birsent Karagaren", team: "Арда", imgUrl: "/images/BirsentKaragaren.png", baseAtk: 82, baseDef: 45, baseCon: 76 },
+    { name: "Antonio Vutov", team: "Арда", imgUrl: "/images/AntonioVutov.png", baseAtk: 76, baseDef: 50, baseCon: 84 },
+    { name: "Andre Shinyashiki", team: "Арда", imgUrl: "/images/AndreShinyashiki.png", baseAtk: 79, baseDef: 38, baseCon: 73 },
+    { name: "Serkan Yusein", team: "Арда", imgUrl: "/images/SerkanYusein.png", baseAtk: 70, baseDef: 65, baseCon: 81 },
+    { name: "Lachezar Kotev", team: "Арда", imgUrl: "/images/LachezarKotev.png", baseAtk: 68, baseDef: 72, baseCon: 79 },
+    { name: "Atanas Kabov", team: "Арда", imgUrl: "/images/AtanasKabov.png", baseAtk: 77, baseDef: 42, baseCon: 74 },
+
+    // CSKA 1948
+    { name: "Dimitar Sheytanov", team: "ЦСКА 1948", imgUrl: "/images/DimitarSheytanov.png", baseAtk: 14, baseDef: 80, baseCon: 62 },
+    { name: "Diego Medina", team: "ЦСКА 1948", imgUrl: "/images/DiegoMedina.png", baseAtk: 55, baseDef: 74, baseCon: 68 },
+    { name: "Lasha Dvali", team: "ЦСКА 1948", imgUrl: "/images/LashaDvali.png", baseAtk: 45, baseDef: 81, baseCon: 66 },
+    { name: "Benaissa Benamar", team: "ЦСКА 1948", imgUrl: "/images/BenaissaBenamar.png", baseAtk: 42, baseDef: 77, baseCon: 64 },
+    { name: "Ognjen Gašević", team: "ЦСКА 1948", imgUrl: "/images/OgnjenGasevic.png", baseAtk: 58, baseDef: 73, baseCon: 67 },
+    { name: "Georgi Rusev", team: "ЦСКА 1948", imgUrl: "/images/GeorgiRusev.png", baseAtk: 83, baseDef: 40, baseCon: 78 },
+    { name: "Borislav Tsonev", team: "ЦСКА 1948", imgUrl: "/images/BorislavTsonev.png", baseAtk: 75, baseDef: 55, baseCon: 83 },
+    { name: "Marto Boychev", team: "ЦСКА 1948", imgUrl: "/images/MartoBoychev.png", baseAtk: 68, baseDef: 58, baseCon: 74 },
+    { name: "Elias Franco", team: "ЦСКА 1948", imgUrl: "/images/EliasFranco.png", baseAtk: 64, baseDef: 70, baseCon: 75 },
+    { name: "Petar Vitanov", team: "ЦСКА 1948", imgUrl: "/images/PetarVitanov.png", baseAtk: 62, baseDef: 76, baseCon: 78 },
+    { name: "Bernardo Couto", team: "ЦСКА 1948", imgUrl: "/images/BernardoCouto.png", baseAtk: 76, baseDef: 38, baseCon: 72 },
+    { name: "Brian Sobrero", team: "ЦСКА 1948", imgUrl: "/images/BrianSobrero.png", baseAtk: 78, baseDef: 32, baseCon: 70 },
+    { name: "Atanas Iliev", team: "ЦСКА 1948", imgUrl: "/images/AtanasIliev.png", baseAtk: 82, baseDef: 35, baseCon: 71 },
+    { name: "Mamadou Diallo", team: "ЦСКА 1948", imgUrl: "/images/MamadouDiallo.png", baseAtk: 77, baseDef: 36, baseCon: 68 },
+    { name: "José Martínez", team: "ЦСКА 1948", imgUrl: "/images/JoseMartinez.png", baseAtk: 40, baseDef: 79, baseCon: 65 },
+
+    // Dunav Ruse
+    { name: "Preslav Bachev", team: "Дунав Русе", imgUrl: "/images/PreslavBachev.png", baseAtk: 76, baseDef: 32, baseCon: 68 },
+    { name: "Ibrahim Keita", team: "Дунав Русе", imgUrl: "/images/IbrahimKeita.png", baseAtk: 78, baseDef: 30, baseCon: 66 },
+    { name: "Hyusein Kelyovluev", team: "Дунав Русе", imgUrl: "/images/HyuseinKelyovluev.png", baseAtk: 72, baseDef: 45, baseCon: 70 },
+    { name: "Borislav Marinov", team: "Дунав Русе", imgUrl: "/images/BorislavMarinov.png", baseAtk: 74, baseDef: 35, baseCon: 67 },
+    { name: "Georgi Kitanov", team: "Дунав Русе", imgUrl: "/images/GeorgiKitanov.png", baseAtk: 12, baseDef: 79, baseCon: 58 },
+    { name: "Kamen Hadzhiev", team: "Дунав Русе", imgUrl: "/images/KamenHadzhiev.png", baseAtk: 45, baseDef: 76, baseCon: 64 },
+    { name: "Mario Dilchovski", team: "Дунав Русе", imgUrl: "/images/MarioDilchovski.png", baseAtk: 15, baseDef: 72, baseCon: 55 },
+    { name: "Áquila", team: "Дунав Русе", imgUrl: "/images/Aquila.png", baseAtk: 50, baseDef: 74, baseCon: 66 },
+    { name: "Stojan Predev", team: "Дунав Русе", imgUrl: "/images/StojanPredev.png", baseAtk: 38, baseDef: 72, baseCon: 60 },
+    { name: "Krasimir Todorov", team: "Дунав Русе", imgUrl: "/images/KrasimirTodorov.png", baseAtk: 68, baseDef: 55, baseCon: 73 },
+    { name: "Eliseé Sou", team: "Дунав Русе", imgUrl: "/images/EliseeSou.png", baseAtk: 55, baseDef: 70, baseCon: 68 },
+    { name: "Bilal El Bakkali Salah", team: "Дунав Русе", imgUrl: "/images/BilalElBakkaliSalah.png", baseAtk: 66, baseDef: 58, baseCon: 72 },
+    { name: "Dimitar Todorov", team: "Дунав Русе", imgUrl: "/images/DimitarTodorov.png", baseAtk: 58, baseDef: 68, baseCon: 65 },
+    { name: "Radoslav Apostolov", team: "Дунав Русе", imgUrl: "/images/RadoslavApostolov.png", baseAtk: 70, baseDef: 62, baseCon: 75 },
+
+    // Lokomotiv Sofia
+    { name: "Martin Velichkov", team: "Локомотив София", imgUrl: "/images/MartinVelichkov.png", baseAtk: 12, baseDef: 81, baseCon: 60 },
+    { name: "Ryan Bidounga", team: "Локомотив София", imgUrl: "/images/RyanBidounga.png", baseAtk: 40, baseDef: 78, baseCon: 64 },
+    { name: "Messie Biatoumoussoka", team: "Локомотив София", imgUrl: "/images/MessieBiatoumoussoka.png", baseAtk: 42, baseDef: 79, baseCon: 62 },
+    { name: "Angel Lyaskov", team: "Локомотив София", imgUrl: "/images/AngelLyaskov.png", baseAtk: 58, baseDef: 74, baseCon: 68 },
+    { name: "Bozhidar Katsarov", team: "Локомотив София", imgUrl: "/images/BozhidarKatsarov.png", baseAtk: 60, baseDef: 75, baseCon: 72 },
+    { name: "Reyan Daskalov", team: "Локомотив София", imgUrl: "/images/ReyanDaskalov.png", baseAtk: 55, baseDef: 74, baseCon: 70 },
+    { name: "Jordon Ibe", team: "Локомотив София", imgUrl: "/images/JordonIbe.png", baseAtk: 80, baseDef: 35, baseCon: 75 },
+    { name: "Dominik Yankov", team: "Локомотив София", imgUrl: "/images/DominikYankov.png", baseAtk: 76, baseDef: 45, baseCon: 84 },
+    { name: "Krasimir Miloshev", team: "Локомотив София", imgUrl: "/images/KrasimirMiloshev.png", baseAtk: 72, baseDef: 62, baseCon: 78 },
+    { name: "Erol Dost", team: "Локомотив София", imgUrl: "/images/ErolDost.png", baseAtk: 65, baseDef: 68, baseCon: 74 },
+    { name: "Spas Delev", team: "Локомотив София", imgUrl: "/images/SpasDelev.png", baseAtk: 82, baseDef: 40, baseCon: 76 },
+    { name: "Ante Aralica", team: "Локомотив София", imgUrl: "/images/AnteAralica.png", baseAtk: 81, baseDef: 32, baseCon: 68 },
+    { name: "Georgi Minchev", team: "Локомотив София", imgUrl: "/images/GeorgiMinchev.png", baseAtk: 84, baseDef: 30, baseCon: 70 },
+    { name: "Simeon Slavchev", team: "Локомотив София", imgUrl: "/images/SimeonSlavchev.png", baseAtk: 68, baseDef: 72, baseCon: 77 },
+    { name: "Krasimir Stanoev", team: "Локомотив София", imgUrl: "/images/KrasimirStanoev.png", baseAtk: 66, baseDef: 64, baseCon: 74 },
+
+    // Septemvri Sofia
+    { name: "Yanko Georgiev", team: "Септември София", imgUrl: "/images/YankoGeorgiev.png", baseAtk: 14, baseDef: 79, baseCon: 58 },
+    { name: "Valentine Ozornwafor", team: "Септември София", imgUrl: "/images/ValentineOzornwafor.png", baseAtk: 38, baseDef: 77, baseCon: 60 },
+    { name: "Mateo Stamatov", team: "Септември София", imgUrl: "/images/MateoStamatov.png", baseAtk: 60, baseDef: 72, baseCon: 66 },
+    { name: "Kubrat Onashchi", team: "Септември София", imgUrl: "/images/KubratOnashchi.png", baseAtk: 70, baseDef: 42, baseCon: 68 },
+    { name: "Robin Schouten", team: "Септември София", imgUrl: "/images/RobinSchouten.png", baseAtk: 56, baseDef: 74, baseCon: 67 },
+    { name: "Dominik Ivkić", team: "Септември София", imgUrl: "/images/DominikIvkic.png", baseAtk: 40, baseDef: 76, baseCon: 62 },
+    { name: "Nicolas Fontaine", team: "Септември София", imgUrl: "/images/NicolasFontaine.png", baseAtk: 73, baseDef: 48, baseCon: 72 },
+    { name: "Ayoub Abou", team: "Септември София", imgUrl: "/images/AyoubAbou.png", baseAtk: 68, baseDef: 60, baseCon: 78 },
+    { name: "Galin Ivanov", team: "Септември София", imgUrl: "/images/GalinIvanov.png", baseAtk: 81, baseDef: 42, baseCon: 84 },
+    { name: "Valon Hamdiu", team: "Септември София", imgUrl: "/images/ValonHamdiu.png", baseAtk: 64, baseDef: 70, baseCon: 73 },
+    { name: "Krasian Kolev", team: "Септември София", imgUrl: "/images/KrasianKolev.png", baseAtk: 72, baseDef: 55, baseCon: 77 },
+    { name: "Bertrand Fourrier", team: "Септември София", imgUrl: "/images/BertrandFourrier.png", baseAtk: 77, baseDef: 30, baseCon: 68 },
+    { name: "Frantzety Herard", team: "Септември София", imgUrl: "/images/FrantzetyHerard.png", baseAtk: 75, baseDef: 35, baseCon: 70 },
+    { name: "Faiz Mattoir", team: "Септември София", imgUrl: "/images/FaizMattoir.png", baseAtk: 76, baseDef: 38, baseCon: 71 },
+    { name: "Edney Ribeiro", team: "Септември София", imgUrl: "/images/EdneyRibeiro.png", baseAtk: 78, baseDef: 32, baseCon: 69 },
+
+    // Spartak Varna
+    { name: "Maksym Kovalyov", team: "Спартак Варна", imgUrl: "/images/MaksymKovalyov.png", baseAtk: 13, baseDef: 82, baseCon: 61 },
+    { name: "Mateo Jurić-Petrašilo", team: "Спартак Варна", imgUrl: "/images/MateoJuricPetrasilo.png", baseAtk: 42, baseDef: 75, baseCon: 64 },
+    { name: "Dimo Krastev", team: "Спартак Варна", imgUrl: "/images/DimoKrastev.png", baseAtk: 50, baseDef: 78, baseCon: 72 },
+    { name: "Ilker Budinov", team: "Спартак Варна", imgUrl: "/images/IlkerBudinov.png", baseAtk: 62, baseDef: 73, baseCon: 68 },
+    { name: "Angel Granchov", team: "Спартак Варна", imgUrl: "/images/AngelGranchov.png", baseAtk: 38, baseDef: 76, baseCon: 60 },
+    { name: "Deyan Lozev", team: "Спартак Варна", imgUrl: "/images/DeyanLozev.png", baseAtk: 65, baseDef: 74, baseCon: 71 },
+    { name: "Boris Ivanov", team: "Спартак Варна", imgUrl: "/images/BorisIvanov.png", baseAtk: 66, baseDef: 60, baseCon: 70 },
+    { name: "Tailson", team: "Спартак Варна", imgUrl: "/images/Tailson.png", baseAtk: 79, baseDef: 36, baseCon: 74 },
+    { name: "Xandy", team: "Спартак Варна", imgUrl: "/images/Xandy.png", baseAtk: 77, baseDef: 40, baseCon: 72 },
+    { name: "Emil Yanchev", team: "Спартак Варна", imgUrl: "/images/EmilYanchev.png", baseAtk: 55, baseDef: 72, baseCon: 68 },
+    { name: "Jota Lopes", team: "Спартак Варна", imgUrl: "/images/JotaLopes.png", baseAtk: 74, baseDef: 45, baseCon: 75 },
+    { name: "Saad Moukachar", team: "Спартак Варна", imgUrl: "/images/SaadMoukachar.png", baseAtk: 68, baseDef: 58, baseCon: 73 },
+    { name: "Tsvetelin Chunchukov", team: "Спартак Варна", imgUrl: "/images/TsvetelinChunchukov.png", baseAtk: 80, baseDef: 34, baseCon: 69 },
+    { name: "Tales", team: "Спартак Варна", imgUrl: "/images/Tales.png", baseAtk: 76, baseDef: 35, baseCon: 70 },
+    { name: "Daniel Ivanov", team: "Спартак Варна", imgUrl: "/images/DanielIvanov.png", baseAtk: 72, baseDef: 50, baseCon: 73 }
 ];
 
 // 40 cards in one deck
@@ -471,10 +675,30 @@ function executeBattlePhase(userActivatedTrap) {
     document.getElementById("enemy-lp").innerText = enemyLifePoints;
 
     let nextBtn = document.getElementById("close-battle-btn");
+
     if (myLifePoints <= 0 || enemyLifePoints <= 0) {
-        nextBtn.innerText = "КРАЙ НА ИГРАТА (Започни отначало)";
-        nextBtn.style.backgroundColor = "#ff0000";
-        nextBtn.onclick = function () { location.reload(); };
+
+        if (enemyLifePoints <= 0 && myLifePoints > 0) {
+            nextBtn.innerText = "🏆 ПОБЕДА! Вземи награда!";
+            nextBtn.style.backgroundColor = "#28a745"; 
+
+            nextBtn.onclick = function () {
+                //Coins
+                let myCoins = parseInt(localStorage.getItem("myCoins")) || 0;
+                myCoins += 30;
+                localStorage.setItem("myCoins", myCoins);
+
+                alert(`🎉 Поздравления! Ти победи и печелиш +30 Coins! \nТекущ баланс: ${myCoins} Coins 💰`);
+
+                window.location.href = "/Index"; 
+            };
+        }
+        else {
+            nextBtn.innerText = "КРАЙ НА ИГРАТА (Започни отначало)";
+            nextBtn.style.backgroundColor = "#ff0000";
+            nextBtn.onclick = function () { location.reload(); };
+        }
+
     } else {
         nextBtn.innerText = "Продължи (Картите отиват на Скамейката)";
         nextBtn.onclick = function () {

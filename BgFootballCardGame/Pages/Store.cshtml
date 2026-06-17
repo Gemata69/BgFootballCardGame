@@ -1,0 +1,350 @@
+﻿@page
+@model BgFootballCardGame.Pages.StoreModel
+@{
+    ViewData["Title"] = "Магазин - BG Football Card Game";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8" />
+    <title>Store - BG Football</title>
+    <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                width: 100vw;
+                height: 100vh;
+                background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                color: white;
+                overflow-x: hidden;
+            }
+
+            /* Стъклен ефект без сенки */
+            .glass-panel {
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 15px;
+            }
+
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 50px;
+                border-bottom: 2px solid #ffd700;
+                background: rgba(0, 0, 0, 0.8);
+            }
+
+            .coins-display {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #ffd700;
+                background: rgba(255, 215, 0, 0.1);
+                padding: 10px 20px;
+                border-radius: 30px;
+                border: 2px solid #ffd700;
+            }
+
+            .store-container {
+                display: flex;
+                justify-content: space-around;
+                padding: 50px;
+                gap: 30px;
+            }
+
+            .store-section {
+                flex: 1;
+                padding: 30px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                transition: transform 0.3s ease;
+            }
+
+                .store-section:hover {
+                    transform: translateY(-10px);
+                    border-color: #ffd700;
+                }
+
+            .pack-image {
+                width: 200px;
+                height: 300px;
+                background: linear-gradient(135deg, #111, #333);
+                border: 3px solid #ffd700;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 5rem;
+            }
+
+            .btn-buy {
+                background: #ffd700;
+                color: #000;
+                font-weight: bold;
+                font-size: 1.2rem;
+                padding: 15px 30px;
+                border: none;
+                border-radius: 30px;
+                cursor: pointer;
+                text-transform: uppercase;
+                width: 80%;
+                margin-top: auto;
+            }
+
+                .btn-buy:hover {
+                    background: #ffea00;
+                }
+
+            .btn-premium {
+                background: transparent;
+                color: #00ffff;
+                border: 2px solid #00ffff;
+            }
+
+                .btn-premium:hover {
+                    background: rgba(0, 255, 255, 0.2);
+                }
+
+            .btn-battlepass {
+                background: transparent;
+                color: #ff00ff;
+                border: 2px solid #ff00ff;
+            }
+
+                .btn-battlepass:hover {
+                    background: rgba(255, 0, 255, 0.2);
+                }
+
+            /* Модал за отваряне на пакет */
+            #pack-opening-modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                z-index: 1000;
+                text-align: center;
+            }
+
+            .pulled-cards-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                height: 100vh;
+                flex-wrap: wrap;
+            }
+
+            .pulled-card {
+                width: 150px;
+                height: 250px;
+                border: 3px solid #ffd700;
+                border-radius: 10px;
+                background: #222;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 5px;
+                animation: popIn 0.5s ease forwards;
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            @@keyframes popIn {
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            .close-modal-btn {
+                position: absolute;
+                bottom: 50px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 15px 40px;
+                background: #fff;
+                color: #000;
+                border: none;
+                font-weight: bold;
+                cursor: pointer;
+                border-radius: 20px;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a asp-page="/Index" style="color: white; text-decoration: none; font-size: 1.2rem; border: 1px solid white; padding: 10px 20px; border-radius: 5px;">⬅ Назад към Менюто</a>
+        <h1 style="margin: 0; color: #ffd700;">КЛУБЕН МАГАЗИН</h1>
+        <div class="coins-display">
+            <span id="player-coins">0</span> 💰
+        </div>
+    </div>
+
+    <div class="store-container">
+        
+        <div class="store-section glass-panel">
+            <h2 style="color: #ffd700;">СТАНДАРТЕН ПАКЕТ</h2>
+            <p>Съдържа 5 произволни карти. <br><span style="color: #aaa; font-size: 0.9rem;">(Нисък шанс за играч на Левски)</span></p>
+            <div class="pack-image">📦</div>
+            <button class="btn-buy" onclick="buyStandardPack()">Купи (500 💰)</button>
+        </div>
+
+        <div class="store-section glass-panel" style="border-color: #ff00ff;">
+            <h2 style="color: #ff00ff;">BATTLE PASS: СЕЗОН 1</h2>
+            <p>Отключи ексклузивни магии, капани и Гарантиран Легендарен Играч.</p>
+            <div class="pack-image" style="border-color: #ff00ff; color: #ff00ff;">🎫</div>
+            <button class="btn-buy btn-battlepass" onclick="buyBattlePass()">Отключи (19.99 лв)</button>
+        </div>
+
+        <div class="store-section glass-panel" style="border-color: #00ffff;">
+            <h2 style="color: #00ffff;">ТРЕЗОР (COINS)</h2>
+            <p>Не ти се чака? Зареди портфейла си веднага.</p>
+            <div class="pack-image" style="border-color: #00ffff; color: #00ffff;">💎</div>
+            <button class="btn-buy btn-premium" onclick="buyCoinsRealMoney()">Купи 5000 💰 (9.99 лв)</button>
+        </div>
+
+    </div>
+
+    <div id="pack-opening-modal">
+        <h1 style="color: #ffd700; margin-top: 50px;">ЧЕСТИТО! ТИ ИЗТЕГЛИ:</h1>
+        <div class="pulled-cards-container" id="pulled-cards-grid">
+        </div>
+        <button class="close-modal-btn" onclick="closePackModal()">ПРИБЕРИ В ИНВЕНТАРА</button>
+    </div>
+
+    <script>
+            // ВАЖНО: Тук трябва да поставиш същия огромен масив `playerDatabase` и `specialCardsDatabase`,
+            // които сложихме в DeckBuilder.cshtml, за да може магазинът да знае откъде да тегли карти.
+        
+            const playerDatabase = [
+                // ПОСТАВИ ЦЯЛАТА БАЗА С ИГРАЧИ ТУК! (От Сангаре до Даниел Иванов)
+                // За примера слагам само 2, ти ги копирай всичките от DeckBuilder-а!
+                { name: "Mustafa Sangare", team: "Левски", imgUrl: "/images/Sangare.png", baseAtk: 88, baseDef: 35, baseCon: 72 },
+                { name: "Dimitar Iliev", team: "Локомотив Пловдив", imgUrl: "/images/DimitarIliev.png", baseAtk: 84, baseDef: 40, baseCon: 82 }
+            ];
+
+            const specialCardsDatabase = [
+                { name: "Penalty", type: "Spell", effect: "Draw2", desc: "Изтегли 2 допълнителни карти.", imgUrl: "/images/+2.png" },
+                { name: "Scout", type: "Spell", effect: "Search", desc: "Изтегли 1 карта.", imgUrl: "/images/search.png" },
+                { name: "Assist", type: "Spell", effect: "+5 Точки", desc: "+5 атака.", imgUrl: "/images/+5.png" },
+                { name: "Tackle", type: "Trap", effect: "NegateAttack", desc: "Спира атака.", imgUrl: "/images/negate attack.png" },
+                { name: "Offside", type: "Trap", effect: "-5 Точки", desc: "-5 точки на противника.", imgUrl: "/images/-5.png" },
+                { name: "Owngoal", type: "Trap", effect: "Автогол", desc: "Обръща щетите.", imgUrl: "/images/autogoal.png" }
+            ];
+
+            const allCardsDatabase = [
+                ...playerDatabase.map(player => ({ ...player, type: "Footballer" })),
+                ...specialCardsDatabase
+            ];
+
+            // 1. Зареждане на монетите
+            let myCoins = parseInt(localStorage.getItem("myCoins")) || 0;
+            document.getElementById("player-coins").innerText = myCoins;
+
+            // 2. Логика за купуване на Стандартен Пакет (500 Coins)
+            function buyStandardPack() {
+                if (myCoins < 500) {
+                    alert("Нямаш достатъчно монети! Играй мачове, за да спечелиш още.");
+                    return;
+                }
+
+                // Взимаме парите
+                myCoins -= 500;
+                localStorage.setItem("myCoins", myCoins);
+                document.getElementById("player-coins").innerText = myCoins;
+
+                // Разделяме картите на пулове
+                const levskiPlayers = allCardsDatabase.filter(c => c.team === "Левски");
+                const otherPlayers = allCardsDatabase.filter(c => c.type === "Footballer" && c.team !== "Левски");
+                const specialCards = allCardsDatabase.filter(c => c.type !== "Footballer");
+
+                let pulledCards = [];
+
+                // Теглим 5 карти
+                for (let i = 0; i < 5; i++) {
+                    let rng = Math.random();
+                    let selectedCard;
+
+                    if (rng < 0.05) {
+                        // 5% Шанс за играч на Левски (Много рядко!)
+                        selectedCard = levskiPlayers[Math.floor(Math.random() * levskiPlayers.length)];
+                    } else if (rng < 0.25) {
+                        // 20% Шанс за Магия или Капан
+                        selectedCard = specialCards[Math.floor(Math.random() * specialCards.length)];
+                    } else {
+                        // 75% Шанс за обикновен футболист от другите отбори
+                        selectedCard = otherPlayers[Math.floor(Math.random() * otherPlayers.length)];
+                    }
+
+                    // Застраховка, ако случайно пулът е празен
+                    if (!selectedCard) selectedCard = otherPlayers[0];
+                
+                    pulledCards.push({ ...selectedCard });
+                }
+
+                // Добавяме ги в инвентара на играча
+                let myInventory = JSON.parse(localStorage.getItem("myInventory")) || [];
+                pulledCards.forEach(card => myInventory.push(card));
+                localStorage.setItem("myInventory", JSON.stringify(myInventory));
+
+                // Показваме ги на екрана
+                showPulledCards(pulledCards);
+            }
+
+            // 3. Визуализация на изтеглените карти
+            function showPulledCards(cardsArray) {
+                const container = document.getElementById("pulled-cards-grid");
+                container.innerHTML = "";
+
+                cardsArray.forEach((card, index) => {
+                    let isLevski = card.team === "Левски";
+                    let borderStyle = isLevski ? "border-color: #00ffff;" : ""; // Левски свети в неон
+                
+                    let inner = `
+                        <div style="font-size: 0.9rem; font-weight: bold; background: white; color: black; padding: 2px;">${card.name}</div>
+                        <div style="flex-grow: 1; display:flex; justify-content:center; align-items:center; background: #eee; overflow: hidden;">
+                            <img src="${card.imgUrl || '/images/search.png'}" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" onerror="this.src='/images/Maicon.png'"/>
+                        </div>
+                        <div style="font-size: 0.7rem; background: #000; color: #ffd700; padding: 2px;">
+                            ${card.type === 'Footballer' ? 'A:' + card.baseAtk + ' D:' + card.baseDef : card.type}
+                        </div>
+                    `;
+
+                    let cardDiv = document.createElement("div");
+                    cardDiv.className = "pulled-card";
+                    cardDiv.style.animationDelay = `${index * 0.2}s`; // Падат една след друга
+                    if (isLevski) cardDiv.style.cssText += borderStyle;
+                    cardDiv.innerHTML = inner;
+
+                    container.appendChild(cardDiv);
+                });
+
+                document.getElementById("pack-opening-modal").style.display = "block";
+            }
+
+            function closePackModal() {
+                document.getElementById("pack-opening-modal").style.display = "none";
+            }
+
+            // --- Местоположения за истински пари ---
+            function buyBattlePass() {
+                alert("Интеграцията с плащания (Stripe/PayPal) за Battle Pass ще бъде добавена скоро!");
+            }
+
+            function buyCoinsRealMoney() {
+                alert("Интеграцията с плащания (Stripe/PayPal) за Премиум Валута ще бъде добавена скоро!");
+            }
+    </script>
+</body>
+</html>
